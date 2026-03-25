@@ -1,0 +1,28 @@
+{
+  "rooms": [
+    {
+      "id": "generator",
+      "description": "A dark generator room with sparks flying.",
+      "exits": {
+        "south": "scrap"
+      },
+      "items": []
+    },
+    {
+      "id": "scrap",
+      "description": "A room filled with metal scraps.",
+      "exits": {
+        "north": "generator"
+      },
+      "items": ["scrap_metal"]
+    }
+  ],
+  "items": [
+    {
+      "id": "scrap_metal",
+      "name": "Scrap Metal",
+      "description": "A piece of scrap metal. Could be used to make a weapon.",
+      "is_portable": true
+    }
+  ]
+}

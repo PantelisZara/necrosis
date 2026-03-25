@@ -21,4 +21,8 @@ public class CurrentGameState {
     public Player getPlayer() {
         return player;
     }
+
+    public Room getRoom(String id) {
+        return rooms.get(id);
+    }
 }

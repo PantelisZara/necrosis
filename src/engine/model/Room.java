@@ -32,4 +32,8 @@ public class Room {
     public List<Item> getItems() {
         return items;
     }
+
+    public String getExit(String direction) {
+        return exits.get(direction);
+    }
 }

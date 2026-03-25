@@ -1,23 +1,23 @@
 package engine.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
 
     private Room currentRoom;
-    private List<Item> inventory = new ArrayList<>();
+    private List<Item> inventory;
 
-    public Player(Room currentRoom) {
+    public Player(Room currentRoom, List<Item> inventory) {
         this.currentRoom = currentRoom;
+        this.inventory = inventory;
     }
 
     public Room getCurrentRoom() {
         return currentRoom;
     }
 
-    public void move(Room room) {
-        currentRoom = room;
+    public void setCurrentRoom(Room currentRoom) {
+        this.currentRoom = currentRoom;
     }
 
     public List<Item> getInventory() {
