@@ -33,6 +33,10 @@ public class Room {
         return items;
     }
 
+    public void removeItem(Item item) {
+        items.remove(item);
+    }
+
     public String getExit(String direction) {
         return exits.get(direction);
     }

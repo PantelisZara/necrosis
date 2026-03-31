@@ -1,4 +1,6 @@
+import engine.commands.InventoryCommand;
 import engine.commands.LookCommand;
+import engine.commands.TakeCommand;
 import engine.core.CurrentGameState;
 import engine.loader.GameLoader;
 import engine.model.Player;
@@ -25,6 +27,8 @@ public class Main {
         CommandCutter parser = new CommandCutter();
         parser.registerCommand("go", new GoCommand());
         parser.registerCommand("look", new LookCommand());
+        parser.registerCommand("take", new TakeCommand());
+        parser.registerCommand("inv", new InventoryCommand());
 
 
         Scanner scanner = new Scanner(System.in);
