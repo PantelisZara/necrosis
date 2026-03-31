@@ -9,7 +9,7 @@ public class CommandCutter {
         commands.put(keyword, command);
     }
 
-    public void parseAndExecute(String input, CurrentGameState gameState) {
+    public void parse_Execute(String input, CurrentGameState gameState) {
 
         List<String> tokens = Arrays.asList(input.split(" "));
 
