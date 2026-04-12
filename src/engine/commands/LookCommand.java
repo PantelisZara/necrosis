@@ -1,8 +1,10 @@
 package engine.commands;
 
 import engine.core.CurrentGameState;
+import engine.model.Exit;
 import engine.model.Item;
 import engine.model.Room;
+import engine.model.Enemy;
 
 import java.util.List;
 import java.util.Map;
@@ -25,13 +27,27 @@ public class LookCommand implements InterfaceCommand {
             }
         }
 
-        Map<String, String> exits = currentRoom.getExits();
+        Map<String, Exit> exits = currentRoom.getExits();
         if (exits == null || exits.isEmpty()) {
             System.out.println("There are no exits.");
         } else {
             System.out.println("Exits:");
             for (String direction : exits.keySet()) {
                 System.out.println("- " + direction);
+            }
+        }
+
+        if (currentRoom.getEnemies() != null && !currentRoom.getEnemies().isEmpty()) {
+            boolean hasActiveEnemies = false;
+
+            for (Enemy enemy : currentRoom.getEnemies()) {
+                if (!enemy.isDefeated()) {
+                    if (!hasActiveEnemies) {
+                        System.out.println("Enemies here:");
+                        hasActiveEnemies = true;
+                    }
+                    System.out.println("- " + enemy.getName());
+                }
             }
         }
     }

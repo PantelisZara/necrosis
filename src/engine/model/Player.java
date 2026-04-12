@@ -24,6 +24,17 @@ public class Player {
         inventory.add(item);
     }
 
+    public void removeItem(Item item) {inventory.remove(item); }
+
+    public Item findItemById(String itemId) {
+        for (Item item : inventory) {
+            if (item.getId().equalsIgnoreCase(itemId)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
     public List<Item> getInventory() {
         return inventory;
     }

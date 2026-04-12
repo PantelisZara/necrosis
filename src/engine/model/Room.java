@@ -7,14 +7,16 @@ public class Room {
 
     private final String id;
     private final String description;
-    private Map<String, String> exits;
-    private List<Item> items;
+    private final Map<String, Exit> exits;
+    private final List<Item> items;
+    private final List<Enemy> enemies;
 
-    public Room(String id, String description, Map<String, String> exits, List<Item> items) {
+    public Room(String id, String description, Map<String, Exit> exits, List<Item> items, List<Enemy> enemies) {
         this.id = id;
         this.description = description;
         this.exits = exits;
         this.items = items;
+        this.enemies = enemies;
     }
 
     public String getId() {
@@ -25,7 +27,7 @@ public class Room {
         return description;
     }
 
-    public Map<String, String> getExits() {
+    public Map<String, Exit> getExits() {
         return exits;
     }
 
@@ -33,11 +35,15 @@ public class Room {
         return items;
     }
 
+    public Exit getExit(String direction) {
+        return exits.get(direction);
+    }
+
     public void removeItem(Item item) {
         items.remove(item);
     }
 
-    public String getExit(String direction) {
-        return exits.get(direction);
+    public List<Enemy> getEnemies() {
+        return enemies;
     }
 }

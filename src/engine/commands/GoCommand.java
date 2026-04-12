@@ -1,30 +1,43 @@
 package engine.commands;
 
 import engine.core.CurrentGameState;
+import engine.model.Exit;
 import engine.model.Room;
+
 import java.util.List;
 
 public class GoCommand implements InterfaceCommand {
+
     @Override
     public void execute(CurrentGameState gameState, List<String> args) {
-        if (args.isEmpty()) {
+        if (args == null || args.isEmpty()) {
             System.out.println("Go where?");
             return;
         }
 
-        String direction = args.getFirst();
+        String direction = args.get(0).toLowerCase();
+
         Room currentRoom = gameState.getPlayer().getCurrentRoom();
-        String nextRoomId = currentRoom.getExit(direction);
+        Exit exit = currentRoom.getExit(direction);
 
-        if (nextRoomId != null) {
-            Room nextRoom = gameState.getRoom(nextRoomId);
-            gameState.getPlayer().setCurrentRoom(nextRoom);
-            System.out.println("You moved to: " + nextRoom.getDescription());
-
-
-        } else {
-            System.out.println("You cant go that way");
+        if (exit == null) {
+            System.out.println("You can't go that way.");
+            return;
         }
 
+        if (exit.isLocked()) {
+            System.out.println("That way is locked.");
+            return;
+        }
+
+        Room nextRoom = gameState.getRoom(exit.getTargetRoomId());
+
+        if (nextRoom == null) {
+            System.out.println("The destination room could not be found.");
+            return;
+        }
+
+        gameState.getPlayer().setCurrentRoom(nextRoom);
+        System.out.println("You moved to: " + nextRoom.getDescription());
     }
 }

@@ -1,12 +1,8 @@
-import engine.commands.InventoryCommand;
-import engine.commands.LookCommand;
-import engine.commands.TakeCommand;
+import engine.commands.*;
 import engine.core.CurrentGameState;
 import engine.loader.GameLoader;
 import engine.model.Player;
 import engine.model.Room;
-import engine.model.Item;
-import engine.commands.GoCommand;
 import engine.parser.CommandCutter;
 
 import java.util.*;
@@ -14,21 +10,27 @@ import java.util.*;
 //early testing game loop
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main() {
 
         Map<String, Room> allRooms = GameLoader.loadRooms("resources/gameData.json");
-        Room startRoom = allRooms.get("generator");
+        Room startRoom = allRooms.get("exam_room");
         Player player = new Player(startRoom, new ArrayList<>());
         CurrentGameState gameState = new CurrentGameState(allRooms, player);
 
-
-
-
         CommandCutter parser = new CommandCutter();
-        parser.registerCommand("go", new GoCommand());
-        parser.registerCommand("look", new LookCommand());
-        parser.registerCommand("take", new TakeCommand());
-        parser.registerCommand("inv", new InventoryCommand());
+
+        parser.registerCommand(new FlagsCommand(), "flags");
+        parser.registerCommand(new GoCommand(), "go", "move");
+        parser.registerCommand(new InventoryCommand(), "inv", "inventory");
+        parser.registerCommand(new TakeCommand(), "take", "grab", "hold", "pick up");
+        parser.registerCommand(new LookCommand(), "look", "view");
+        parser.registerCommand(new LookAtCommand(), "look at", "inspect", "examine");
+        parser.registerCommand(new UseCommand(), "use");
+        parser.registerCommand(new ReadCommand(), "read");
+        parser.registerCommand(new EnterCommand(), "enter");
+        parser.registerCommand(new TalkCommand(), "talk", "talk to");
+
+
 
 
         Scanner scanner = new Scanner(System.in);

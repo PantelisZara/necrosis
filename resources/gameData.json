@@ -1,27 +1,145 @@
 {
   "rooms": [
     {
-      "id": "generator",
-      "description": "A dark generator room with sparks flying.",
+      "id": "exam_room",
+      "description": "A cold exam room. Emily is here, watching you closely.",
       "exits": {
-        "south": "scrap"
+        "north": {
+          "targetRoomId": "lobby",
+          "locked": false
+        }
+      },
+      "items": ["notebook", "flashlight", "bandages"]
+    },
+    {
+      "id": "lobby",
+      "description": "A ruined central lobby with overturned furniture and old blood on the floor.",
+      "exits": {
+        "south": {
+          "targetRoomId": "exam_room",
+          "locked": false
+        },
+        "west": {
+          "targetRoomId": "generator_room",
+          "locked": false
+        },
+        "east": {
+          "targetRoomId": "research_room",
+          "locked": false
+        },
+        "north": {
+          "targetRoomId": "boss_room",
+          "locked": true
+        }
       },
       "items": []
     },
     {
-      "id": "scrap",
-      "description": "A room filled with metal scraps.",
+      "id": "generator_room",
+      "description": "A dark generator room filled with diesel fumes and broken machinery.",
       "exits": {
-        "north": "generator"
+        "east": {
+          "targetRoomId": "lobby",
+          "locked": false
+        }
       },
-      "items": ["scrap_metal"]
+      "items": ["fuel_canister"],
+      "enemies": [
+        {
+          "id": "ripper_1",
+          "name": "ripper",
+          "description": "A hunched, doglike infected prowls near the generator.",
+          "type": "RIPPER"
+        }
+      ]
+    },
+    {
+      "id": "research_room",
+      "description": "A damaged research lab with broken terminals and scattered notes.",
+      "exits": {
+        "west": {
+          "targetRoomId": "lobby",
+          "locked": false
+        }
+      },
+      "items": ["scrap_metal", "research_notes"],
+      "enemies": [
+        {
+          "id": "clicker_1",
+          "name": "clicker",
+          "description": "A blind creature stands motionless near the examination table, clicking softly.",
+          "type": "CLICKER"
+        }
+      ]
+    },
+    {
+      "id": "boss_room",
+      "description": "A sealed laboratory where Dr. Zaun waits in the shadows.",
+      "exits": {
+        "south": {
+          "targetRoomId": "lobby",
+          "locked": false
+        },
+        "north": {
+          "targetRoomId": "exit_room",
+          "locked": true
+        }
+      },
+      "items": ["keycard"]
+    },
+    {
+      "id": "exit_room",
+      "description": "A final escape route leading outside the facility.",
+      "exits": {
+        "south": {
+          "targetRoomId": "boss_room",
+          "locked": false
+        }
+      },
+      "items": []
     }
   ],
   "items": [
     {
+      "id": "notebook",
+      "name": "notebook",
+      "description": "The notebook is written in your own handwriting. One line is underlined twice: 'Find the truth. Trust no one. Especially not Dr. Zaun.' In the margin you see a number sequence: 7314.",
+      "is_portable": true
+    },
+    {
+      "id": "flashlight",
+      "name": "flashlight",
+      "description": "A flashlight with moderate battery life.",
+      "is_portable": true
+    },
+    {
+      "id": "bandages",
+      "name": "bandages",
+      "description": "Clean bandages that may be useful later.",
+      "is_portable": true
+    },
+    {
       "id": "scrap_metal",
-      "name": "Scrap Metal",
+      "name": "scrap metal",
       "description": "A piece of scrap metal. Could be used to make a weapon.",
+      "is_portable": true
+    },
+    {
+      "id": "fuel_canister",
+      "name": "fuel canister",
+      "description": "A heavy fuel canister used to restore generator power.",
+      "is_portable": true
+    },
+    {
+      "id": "research_notes",
+      "name": "research notes",
+      "description": "The notes describe NV-1 as an experimental gene therapy that failed catastrophically. One page mentions a terminal override tied to internal security protocols.",
+      "is_portable": true
+    },
+    {
+      "id": "keycard",
+      "name": "keycard",
+      "description": "A security keycard with high-level clearance.",
       "is_portable": true
     }
   ]
