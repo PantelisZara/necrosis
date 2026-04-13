@@ -9,7 +9,23 @@
           "locked": false
         }
       },
-      "items": ["notebook", "flashlight", "bandages"]
+      "items": ["notebook", "flashlight", "bandages"],
+      "enemies": [],
+      "interactables": [],
+      "npcs": [
+        {
+          "id": "emily",
+          "name": "emily",
+          "description": "A tired nurse in bloodstained scrubs, trying to hold herself together.",
+          "dialogues": [
+            {
+              "requiredFlag": null,
+              "forbiddenFlag": "power_restored",
+              "text": "Emily looks exhausted, but relieved that you are awake. \"If we can restore power in the generator room, we might still have a chance. And if you see Dr. Zaun... don't listen to him.\""
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "lobby",
@@ -51,6 +67,18 @@
           "description": "A hunched, doglike infected prowls near the generator.",
           "type": "RIPPER"
         }
+      ],
+      "interactables": [
+        {
+          "id": "generator",
+          "name": "generator",
+          "description": "A damaged backup generator connected to the facility power grid.",
+          "requiredItemId": "fuel_canister",
+          "requiredFlag": null,
+          "setsFlag": "power_restored",
+          "successMessage": "You pour the fuel into the generator and restart the system. The lights flicker back to life.",
+          "failureMessage": "The generator won't start without fuel."
+        }
       ]
     },
     {
@@ -70,6 +98,18 @@
           "description": "A blind creature stands motionless near the examination table, clicking softly.",
           "type": "CLICKER"
         }
+      ],
+      "interactables": [
+        {
+          "id": "terminal",
+          "name": "terminal",
+          "description": "A security terminal with a cracked but active screen.",
+          "requiredItemId": null,
+          "requiredFlag": "power_restored",
+          "setsFlag": "terminal_prompt_active",
+          "successMessage": "The terminal flickers to life. ACCESS CODE REQUIRED.",
+          "failureMessage": "The terminal has no power."
+        }
       ]
     },
     {
@@ -85,7 +125,32 @@
           "locked": true
         }
       },
-      "items": ["keycard"]
+
+      "items": ["keycard"],
+      "npcs": [
+        {
+          "id": "zaun",
+          "name": "zaun",
+          "description": "Dr. Zaun stands before the containment tank, calm and unreadable.",
+          "dialogues": [
+            {
+              "requiredFlag": null,
+              "forbiddenFlag": "zaun_encounter_started",
+              "text": "Dr. Zaun steps forward. \"You finally made it. You think this is a disaster... but it's evolution.\""
+            },
+            {
+              "requiredFlag": "zaun_encounter_started",
+              "forbiddenFlag": "zaun_defeated",
+              "text": "Zaun watches you silently as the chamber trembles around you."
+            },
+            {
+              "requiredFlag": "zaun_defeated",
+              "forbiddenFlag": null,
+              "text": "\"So... you survived them all. Now make your choice.\""
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "exit_room",

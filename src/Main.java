@@ -33,10 +33,6 @@ public class Main {
         parser.registerCommand(new ChooseCommand(), "choose");
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("\nCold. The first thing you feel is cold. Then the beeping. A heart monitor, disconnected, its battery crying out in three-second intervals. Your eyes open to cracked ceiling tiles and the sharp sting of antiseptic." +
-                "A woman's face hovers above you. She is young, tired, wearing scrubs stained with something dark at the cuffs. Her name badge reads: EMILY, R.N.\n" +
-                "\n" +
-                "\"You're awake,\" she whispers. \"I didn't think you would be.\"");
         System.out.println("Type 'go <direction>' to move.");
 
         while (true) {

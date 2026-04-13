@@ -5,6 +5,7 @@ import engine.model.Exit;
 import engine.model.Item;
 import engine.model.Room;
 import engine.model.Enemy;
+import engine.model.Npc;
 
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,10 @@ public class LookCommand implements InterfaceCommand {
                     System.out.println("- " + enemy.getName());
                 }
             }
+        }
+        for (Npc npc : currentRoom.getNpcs()) {
+            System.out.println("Npcs:");
+            System.out.println("- " + npc.getName());
         }
     }
 }

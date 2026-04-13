@@ -2,7 +2,7 @@ package engine.commands;
 
 import engine.core.CurrentGameState;
 import engine.model.Exit;
-import engine.model.Item;
+import engine.model.Interactable;
 import engine.model.Room;
 
 import java.util.List;
@@ -19,74 +19,48 @@ public class UseCommand implements InterfaceCommand {
         String target = String.join(" ", args).toLowerCase();
         Room currentRoom = gameState.getPlayer().getCurrentRoom();
 
-        if (target.equals("generator")) {
-            useGenerator(gameState, currentRoom);
+        Interactable interactable = currentRoom.findInteractableByName(target);
+
+        if (interactable == null) {
+            System.out.println("You can't use that here.");
             return;
         }
 
-        if (target.equals("terminal")) {
-            useTerminal(gameState, currentRoom);
+        if (interactable.getRequiredFlag() != null &&
+                !gameState.isFlagTrue(interactable.getRequiredFlag())) {
+            System.out.println(interactable.getFailureMessage());
             return;
         }
 
-        System.out.println("You can't use that right now.");
-    }
-
-    private void useGenerator(CurrentGameState gameState, Room currentRoom) {
-        if (!currentRoom.getId().equalsIgnoreCase("generator_room")) {
-            System.out.println("There is no generator here.");
+        if (interactable.getRequiredItemId() != null &&
+                gameState.getPlayer().findItemById(interactable.getRequiredItemId()) == null) {
+            System.out.println(interactable.getFailureMessage());
             return;
         }
 
-        if (gameState.isFlagTrue("power_restored")) {
-            System.out.println("The generator is already running.");
-            return;
-        }
-
-        Item fuelCanister = gameState.getPlayer().findItemById("fuel_canister");
-
-        if (fuelCanister == null) {
-            System.out.println("You need fuel to power the generator.");
-            return;
-        }
-
-        gameState.setFlag("power_restored", true);
-        gameState.getPlayer().removeItem(fuelCanister);
-
-        Room lobby = gameState.getRoom("lobby");
-        if (lobby != null) {
-            Exit northExit = lobby.getExit("north");
-            if (northExit != null) {
-                northExit.unlock();
+        if (interactable.getRequiredItemId() != null) {
+            var item = gameState.getPlayer().findItemById(interactable.getRequiredItemId());
+            if (item != null) {
+                gameState.getPlayer().removeItem(item);
             }
         }
 
-        System.out.println("You pour the fuel into the generator and restart the system.");
-        System.out.println("The lights flicker back to life.");
-        System.out.println("You hear security doors unlocking somewhere in the facility.");
-    }
-
-    private void useTerminal(CurrentGameState gameState, Room currentRoom) {
-        if (!currentRoom.getId().equalsIgnoreCase("research_room")) {
-            System.out.println("There is no terminal here.");
-            return;
+        if (interactable.getSetsFlag() != null) {
+            gameState.setFlag(interactable.getSetsFlag(), true);
         }
 
-        if (!gameState.isFlagTrue("power_restored")) {
-            System.out.println("The terminal has no power.");
-            return;
+        System.out.println(interactable.getSuccessMessage());
+
+        if ("power_restored".equals(interactable.getSetsFlag())) {
+            Room lobby = gameState.getRoom("lobby");
+            if (lobby != null) {
+                Exit northExit = lobby.getExit("north");
+                if (northExit != null) {
+                    northExit.unlock();
+                }
+            }
+            gameState.setFlag("boss_room_unlocked", true);
+            System.out.println("You hear security doors unlocking somewhere in the facility.");
         }
-
-        if (gameState.isFlagTrue("terminal_unlocked")) {
-            System.out.println("The terminal is already unlocked.");
-            return;
-        }
-
-        gameState.setFlag("terminal_prompt_active", true);
-
-        System.out.println("The terminal flickers to life.");
-        System.out.println("ACCESS CODE REQUIRED");
-        System.out.println("Type: enter code <your_code>");
-
     }
 }
