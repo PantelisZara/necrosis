@@ -46,4 +46,26 @@ public class Room {
     public List<Enemy> getEnemies() {
         return enemies;
     }
+
+    public void addEnemy(Enemy enemy) {
+        enemies.add(enemy);
+    }
+
+    public boolean hasActiveEnemies() {
+        for (Enemy enemy : enemies) {
+            if (!enemy.isDefeated()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Enemy findActiveEnemyByName(String enemyName) {
+        for (Enemy enemy : enemies) {
+            if (!enemy.isDefeated() && enemy.getName().toLowerCase().equals(enemyName.toLowerCase())) {
+                return enemy;
+            }
+        }
+        return null;
+    }
 }

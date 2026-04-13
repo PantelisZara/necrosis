@@ -2,6 +2,7 @@ package engine.commands;
 
 import engine.core.CurrentGameState;
 import engine.model.Room;
+import engine.systems.ZaunEncounterSystem;
 
 import java.util.List;
 
@@ -16,16 +17,46 @@ public class TalkCommand implements InterfaceCommand {
 
         String target = String.join(" ", args).toLowerCase().trim();
 
-        if (target.equals("to emily")) {
-            target = "emily";
-        }
-
-        if (!target.equals("emily")) {
-            System.out.println("There is no one here by that name.");
+        if (target.equals("emily")) {
+            talkToEmily(gameState);
             return;
         }
 
-        talkToEmily(gameState);
+        if (target.equals("zaun")) {
+            talkToZaun(gameState);
+            return;
+        }
+
+        System.out.println("There is no one here by that name.");
+    }
+
+    private void talkToZaun(CurrentGameState gameState) {
+        Room currentRoom = gameState.getPlayer().getCurrentRoom();
+
+        if (!currentRoom.getId().equalsIgnoreCase("boss_room")) {
+            System.out.println("Dr. Zaun is not here.");
+            return;
+        }
+
+        if (gameState.isFlagTrue("zaun_defeated")) {
+            System.out.println("Zaun lies motionless. It's over.");
+            return;
+        }
+
+        if (!gameState.isFlagTrue("zaun_encounter_started")) {
+            System.out.println("A figure emerges from the shadows.");
+            System.out.println("Dr. Zaun steps forward, his eyes hollow yet intense.");
+            System.out.println("\"You finally made it,\" he says calmly.");
+            System.out.println("\"Do you understand what you've done? What this place was meant to become?\"");
+            System.out.println("\"You think this is a disaster... but it's evolution.\"");
+            System.out.println();
+            System.out.println("The chamber trembles as containment locks disengage.");
+
+            ZaunEncounterSystem.startEncounter(gameState);
+            return;
+        }
+
+        System.out.println("Zaun watches you silently, waiting.");
     }
 
     private void talkToEmily(CurrentGameState gameState) {

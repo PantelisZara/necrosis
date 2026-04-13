@@ -29,9 +29,8 @@ public class Main {
         parser.registerCommand(new ReadCommand(), "read");
         parser.registerCommand(new EnterCommand(), "enter");
         parser.registerCommand(new TalkCommand(), "talk", "talk to");
-
-
-
+        parser.registerCommand(new DealWithCommand(), "deal with");
+        parser.registerCommand(new ChooseCommand(), "choose");
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("\nCold. The first thing you feel is cold. Then the beeping. A heart monitor, disconnected, its battery crying out in three-second intervals. Your eyes open to cracked ceiling tiles and the sharp sting of antiseptic." +
