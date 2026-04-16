@@ -1,6 +1,8 @@
 package engine.commands;
 
 import engine.core.CurrentGameState;
+import engine.model.Exit;
+import engine.model.Item;
 import engine.model.Room;
 
 import java.util.List;
@@ -46,13 +48,31 @@ public class ChooseCommand implements InterfaceCommand {
     }
 
     private void chooseKill(CurrentGameState gameState) {
-        gameState.setFlag("ending_survival", true);
+        gameState.setFlag("ending_kill", true);
         gameState.setFlag("final_choice_available", false);
 
         System.out.println("You strike Dr. Zaun down before he can say another word.");
-        System.out.println("His keycard falls from his hand as he collapses.");
-        System.out.println("Emily meets you at the escape route, shaken but alive.");
-        System.out.println("ENDING: SURVIVAL");
+        System.out.println("He collapses silently.");
+
+        Item keycard = new Item(
+                "keycard",
+                "keycard",
+                "A high-level security keycard bearing Dr. Zaun's clearance mark.",
+                true
+        );
+
+        gameState.getPlayer().addItem(keycard);
+
+        Room bossRoom = gameState.getRoom("boss_room");
+        if (bossRoom != null) {
+            Exit northExit = bossRoom.getExit("north");
+            if (northExit != null) {
+                northExit.unlock();
+            }
+        }
+
+        System.out.println("You pick up Zaun's keycard.");
+        System.out.println("The way to the escape route is now open.");
     }
 
     private void chooseSpare(CurrentGameState gameState) {

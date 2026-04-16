@@ -1,60 +1,45 @@
 package engine.commands;
 
 import engine.core.CurrentGameState;
+import engine.model.Exit;
 import engine.model.Room;
 
 import java.util.List;
 
 public class EnterCommand implements InterfaceCommand {
 
-    private static final String TERMINAL_CODE = "7314";
-
     @Override
     public void execute(CurrentGameState gameState, List<String> args) {
-        if (args == null || args.size() < 2) {
-            System.out.println("Usage: enter code <number>");
-            return;
-        }
-
-        String firstArg = args.get(0).toLowerCase();
-
-        if (!firstArg.equals("code")) {
-            System.out.println("Usage: enter code <number>");
-            return;
-        }
-
-        String enteredCode = String.join(" ", args.subList(1, args.size())).trim();
-        Room currentRoom = gameState.getPlayer().getCurrentRoom();
-
-        if (!currentRoom.getId().equalsIgnoreCase("research_room")) {
-            System.out.println("There is nothing here that accepts a code.");
-            return;
-        }
-
-        if (!gameState.isFlagTrue("power_restored")) {
-            System.out.println("The terminal has no power.");
-            return;
-        }
-
-        if (gameState.isFlagTrue("terminal_unlocked")) {
-            System.out.println("The terminal is already unlocked.");
-            return;
-        }
 
         if (!gameState.isFlagTrue("terminal_prompt_active")) {
-            System.out.println("You need to activate the terminal first.");
+            System.out.println("There is nothing to enter a code into.");
             return;
         }
 
-        if (enteredCode.equals(TERMINAL_CODE)) {
-            gameState.setFlag("terminal_unlocked", true);
-            gameState.setFlag("terminal_prompt_active", false);
+        if (args.size() < 2) {
+            System.out.println("Enter what code?");
+            return;
+        }
 
-            System.out.println("Code accepted.");
-            System.out.println("Research archives unlocked.");
-            System.out.println("A hidden compartment opens somewhere in the room.");
-        } else {
-            System.out.println("Access denied.");
+        String code = args.get(1);
+
+        if (!code.equals("7314")) {
+            System.out.println("ACCESS DENIED.");
+            return;
+        }
+
+        System.out.println("ACCESS GRANTED.");
+        System.out.println("Security door unlocking...");
+
+        gameState.setFlag("terminal_unlocked", true);
+        gameState.setFlag("terminal_prompt_active", false);
+
+        Room lobby = gameState.getRoom("lobby");
+        if (lobby != null) {
+            Exit northExit = lobby.getExit("north");
+            if (northExit != null) {
+                northExit.unlock();
+            }
         }
     }
 }

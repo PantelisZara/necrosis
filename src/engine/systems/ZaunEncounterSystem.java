@@ -1,9 +1,7 @@
 package engine.systems;
 
 import engine.core.CurrentGameState;
-import engine.model.Enemy;
-import engine.model.EnemyType;
-import engine.model.Room;
+import engine.model.*;
 
 public class ZaunEncounterSystem {
 
@@ -15,10 +13,7 @@ public class ZaunEncounterSystem {
         gameState.setFlag("zaun_encounter_started", true);
         gameState.setZaunPhase(1);
 
-        Room bossRoom = gameState.getRoom("boss_room");
-        if (bossRoom != null) {
-            spawnPhaseEnemies(bossRoom, 1);
-        }
+        spawnPhase(gameState, 1);
     }
 
     public static void advanceIfNeeded(CurrentGameState gameState) {
@@ -39,17 +34,13 @@ public class ZaunEncounterSystem {
 
         if (currentPhase == 1) {
             gameState.setZaunPhase(2);
-            spawnPhaseEnemies(bossRoom, 2);
-            System.out.println("Zaun's voice echoes through the lab:");
-            System.out.println("\"Their sacrifice was not in vain. The Catalyst is forming in you. I can see it.\"");
+            spawnPhase(gameState, 2);
             return;
         }
 
         if (currentPhase == 2) {
             gameState.setZaunPhase(3);
-            spawnPhaseEnemies(bossRoom, 3);
-            System.out.println("Zaun laughs softly.");
-            System.out.println("\"Kill them. Kill them all. Every death strengthens the Catalyst.\"");
+            spawnPhase(gameState, 3);
             return;
         }
 
@@ -64,61 +55,40 @@ public class ZaunEncounterSystem {
         }
     }
 
-    private static void spawnPhaseEnemies(Room bossRoom, int phase) {
-        if (phase == 1) {
-            bossRoom.addEnemy(new Enemy(
-                    "zaun_phase1_infected_1",
-                    "zombified human",
-                    "A shambling infected staggers toward you.",
-                    EnemyType.STANDARD_INFECTED
-            ));
-            bossRoom.addEnemy(new Enemy(
-                    "zaun_phase1_infected_2",
-                    "zombified human",
-                    "Its skin hangs in torn sheets as it advances.",
-                    EnemyType.STANDARD_INFECTED
-            ));
-            bossRoom.addEnemy(new Enemy(
-                    "zaun_phase1_infected_3",
-                    "zombified human",
-                    "It lets out a broken moan and lunges.",
-                    EnemyType.STANDARD_INFECTED
-            ));
-
-            System.out.println("Zaun releases the first wave.");
-            System.out.println("Three zombified humans stagger out from shattered glass enclosures.");
+    private static void spawnPhase(CurrentGameState gameState, int phaseNumber) {
+        Room bossRoom = gameState.getRoom("boss_room");
+        if (bossRoom == null) {
+            return;
         }
 
-        if (phase == 2) {
-            bossRoom.addEnemy(new Enemy(
-                    "zaun_phase2_clicker_1",
-                    "clicker",
-                    "A blind creature clicks sharply, tilting its head toward you.",
-                    EnemyType.CLICKER
-            ));
-            bossRoom.addEnemy(new Enemy(
-                    "zaun_phase2_clicker_2",
-                    "clicker",
-                    "Its calcified face twitches as it listens for movement.",
-                    EnemyType.CLICKER
-            ));
+        ZaunPhase phase = gameState.getZaunPhases()
+                .stream()
+                .filter(p -> p.getPhase() == phaseNumber)
+                .findFirst()
+                .orElse(null);
 
-            System.out.println("Zaun opens another containment line.");
-            System.out.println("Two clickers emerge, heads twitching toward the slightest sound.");
+        if (phase == null) {
+            System.out.println("No data found for Zaun phase " + phaseNumber + ".");
+            return;
         }
 
-        if (phase == 3) {
-            for (int i = 1; i <= 4; i++) {
+        System.out.println(phase.getMessage());
+
+        for (EnemySpawn spawn : phase.getEnemies()) {
+            EnemyType enemyType = EnemyType.valueOf(spawn.getType().toUpperCase());
+
+            for (int i = 1; i <= spawn.getCount(); i++) {
+                String generatedId = "zaun_phase" + phaseNumber + "_" + spawn.getType().toLowerCase() + "_" + i;
+                String generatedName = spawn.getType().toLowerCase().replace("_", " ");
+                String generatedDescription = "A hostile " + generatedName + " attacks.";
+
                 bossRoom.addEnemy(new Enemy(
-                        "zaun_phase3_ripper_" + i,
-                        "ripper",
-                        "A hunched, doglike infected snarls and scrapes across the floor.",
-                        EnemyType.RIPPER
+                        generatedId,
+                        generatedName,
+                        generatedDescription,
+                        enemyType
                 ));
             }
-
-            System.out.println("Metal locks snap open around the room.");
-            System.out.println("A pack of rippers bursts from the lower cages.");
         }
     }
 }

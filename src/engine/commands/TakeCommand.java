@@ -15,6 +15,9 @@ public class TakeCommand implements InterfaceCommand {
             System.out.println("Take what?");
             return;
         }
+        if (engine.systems.ThreatSystem.triggerEnemyAttack(gameState, "take something")) {
+            return;
+        }
 
         String target = String.join(" ", args).toLowerCase();
         Room currentRoom = gameState.getPlayer().getCurrentRoom();

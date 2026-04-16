@@ -14,6 +14,9 @@ public class ReadCommand implements InterfaceCommand {
             System.out.println("Read what?");
             return;
         }
+        if (engine.systems.ThreatSystem.triggerEnemyAttack(gameState, "read")) {
+            return;
+        }
 
         String targetName = String.join(" ", args).toLowerCase();
 

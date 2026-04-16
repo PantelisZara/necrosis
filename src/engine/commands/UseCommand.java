@@ -4,6 +4,8 @@ import engine.core.CurrentGameState;
 import engine.model.Exit;
 import engine.model.Interactable;
 import engine.model.Room;
+import engine.model.Player;
+import engine.model.Item;
 
 import java.util.List;
 
@@ -17,6 +19,16 @@ public class UseCommand implements InterfaceCommand {
         }
 
         String target = String.join(" ", args).toLowerCase();
+
+        if (target.equals("bandage") || target.equals("bandages")) {
+            useBandages(gameState);
+            return;
+        }
+
+        if (engine.systems.ThreatSystem.triggerEnemyAttack(gameState, "use " + target)) {
+            return;
+        }
+
         Room currentRoom = gameState.getPlayer().getCurrentRoom();
 
         Interactable interactable = currentRoom.findInteractableByName(target);
@@ -49,18 +61,32 @@ public class UseCommand implements InterfaceCommand {
             gameState.setFlag(interactable.getSetsFlag(), true);
         }
 
+
+
         System.out.println(interactable.getSuccessMessage());
 
-        if ("power_restored".equals(interactable.getSetsFlag())) {
-            Room lobby = gameState.getRoom("lobby");
-            if (lobby != null) {
-                Exit northExit = lobby.getExit("north");
-                if (northExit != null) {
-                    northExit.unlock();
-                }
-            }
-            gameState.setFlag("boss_room_unlocked", true);
-            System.out.println("You hear security doors unlocking somewhere in the facility.");
+
+    }
+
+    private void useBandages(CurrentGameState gameState) {
+        Player player = gameState.getPlayer();
+
+        if (!player.isInjured()) {
+            System.out.println("You don't need bandages right now.");
+            return;
         }
+
+        Item bandages = player.findItemById("bandages");
+
+        if (bandages == null) {
+            System.out.println("You don't have any bandages.");
+            return;
+        }
+
+        player.removeItem(bandages);
+        player.heal();
+
+        System.out.println("You quickly wrap your wounds with the bandages.");
+        System.out.println("You are no longer bleeding.");
     }
 }

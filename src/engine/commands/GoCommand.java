@@ -15,6 +15,10 @@ public class GoCommand implements InterfaceCommand {
             return;
         }
 
+        if (engine.systems.ThreatSystem.triggerEnemyAttack(gameState, "move")) {
+            return;
+        }
+
         String direction = args.get(0).toLowerCase();
 
         Room currentRoom = gameState.getPlayer().getCurrentRoom();

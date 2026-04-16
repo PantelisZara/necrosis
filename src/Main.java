@@ -4,6 +4,7 @@ import engine.loader.GameLoader;
 import engine.model.Player;
 import engine.model.Room;
 import engine.parser.CommandCutter;
+import engine.loader.LoadedGameData;
 
 import java.util.*;
 
@@ -12,14 +13,23 @@ public class Main {
 
     public static void main() {
 
-        Map<String, Room> allRooms = GameLoader.loadRooms("resources/gameData.json");
+        LoadedGameData loadedData = GameLoader.loadGameData("resources/gameData.json");
+        Map<String, Room> allRooms = loadedData.getRooms();
+
         Room startRoom = allRooms.get("exam_room");
+
+        if (startRoom == null) {
+            System.out.println("Start room could not be loaded.");
+            return;
+        }
+
         Player player = new Player(startRoom, new ArrayList<>());
         CurrentGameState gameState = new CurrentGameState(allRooms, player);
 
+        gameState.setZaunPhases(loadedData.getZaunPhases());
+
         CommandCutter parser = new CommandCutter();
 
-        parser.registerCommand(new FlagsCommand(), "flags");
         parser.registerCommand(new GoCommand(), "go", "move");
         parser.registerCommand(new InventoryCommand(), "inv", "inventory");
         parser.registerCommand(new TakeCommand(), "take", "grab", "hold", "pick up");

@@ -2,7 +2,7 @@
   "rooms": [
     {
       "id": "exam_room",
-      "description": "A cold exam room. Emily is here, watching you closely.",
+      "description": "Cold. The first thing you feel is cold. Then the beeping. A heart monitor, disconnected, cries out in three-second intervals. Emily stands beside the bed, pale and exhausted.",
       "exits": {
         "north": {
           "targetRoomId": "lobby",
@@ -21,7 +21,7 @@
             {
               "requiredFlag": null,
               "forbiddenFlag": "power_restored",
-              "text": "Emily looks exhausted, but relieved that you are awake. \"If we can restore power in the generator room, we might still have a chance. And if you see Dr. Zaun... don't listen to him.\""
+              "text": "Emily looks exhausted, but relieved that you are awake. \"The terminal in the research room may still have security access, but it needs power. If we can get the generator running, we might still have a chance. And if you see Dr. Zaun... don't listen to him.\""
             }
           ]
         }
@@ -29,7 +29,7 @@
     },
     {
       "id": "lobby",
-      "description": "A ruined central lobby with overturned furniture and old blood on the floor.",
+      "description": "A ruined central lobby with overturned furniture, shattered monitors, and dried blood across the tiles. The north corridor remains sealed behind a reinforced security door.",
       "exits": {
         "south": {
           "targetRoomId": "exam_room",
@@ -48,23 +48,83 @@
           "locked": true
         }
       },
-      "items": []
+      "items": [],
+      "enemies": [
+        {
+          "id": "infected_lobby_1",
+          "name": "zombified human",
+          "description": "A staggering infected drags one leg behind it, murmuring fragments of a forgotten sentence.",
+          "type": "STANDARD_INFECTED"
+        }
+      ],
+      "interactables": [],
+      "npcs": []
+    },
+    {
+      "id": "research_room",
+      "description": "A damaged research lab filled with cracked terminals, scattered papers and overturned storage trays. A blind clicker stands near the far wall, listening.",
+      "exits": {
+        "west": {
+          "targetRoomId": "lobby",
+          "locked": false
+        }
+      },
+      "items": ["research_notes", "fuel_canister", "scrap_metal", "broken_bottle"],
+      "enemies": [
+        {
+          "id": "clicker_1",
+          "name": "clicker",
+          "description": "A blind creature stands motionless near the examination table, clicking softly into the darkness.",
+          "type": "CLICKER"
+        }
+      ],
+      "interactables": [
+        {
+          "id": "terminal",
+          "name": "terminal",
+          "description": "A security terminal with a cracked but still functional display.",
+          "requiredItemId": null,
+          "requiredFlag": "power_restored",
+          "setsFlag": "terminal_prompt_active",
+          "successMessage": "The terminal flickers to life. ACCESS CODE REQUIRED.",
+          "failureMessage": "The terminal has no power."
+        }
+      ],
+      "npcs": [
+        {
+          "id": "emily",
+          "name": "emily",
+          "description": "Emily searches the ruined lab for anything still usable.",
+          "dialogues": [
+            {
+              "requiredFlag": "power_restored",
+              "forbiddenFlag": "terminal_unlocked",
+              "text": "Emily keeps her voice low. \"If Zaun locked the north wing, the terminal should tell us why. I found references to override protocols in the research records. Check every note carefully.\""
+            },
+            {
+              "requiredFlag": "terminal_unlocked",
+              "forbiddenFlag": null,
+              "text": "Emily reads the glowing terminal screen and goes pale. \"So it was true... NV-1 wasn't an accident. Zaun built this. If that door is open now, then he's waiting for you.\""
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "generator_room",
-      "description": "A dark generator room filled with diesel fumes and broken machinery.",
+      "description": "A dark generator room filled with diesel fumes, hot metal, and broken machinery. Sparks hiss from an open control panel while something growls in the dark.",
       "exits": {
         "east": {
           "targetRoomId": "lobby",
           "locked": false
         }
       },
-      "items": ["fuel_canister"],
+      "items": [],
       "enemies": [
         {
           "id": "ripper_1",
           "name": "ripper",
-          "description": "A hunched, doglike infected prowls near the generator.",
+          "description": "A hunched, doglike infected prowls near the generator, claws scraping on the concrete floor.",
           "type": "RIPPER"
         }
       ],
@@ -79,42 +139,12 @@
           "successMessage": "You pour the fuel into the generator and restart the system. The lights flicker back to life.",
           "failureMessage": "The generator won't start without fuel."
         }
-      ]
-    },
-    {
-      "id": "research_room",
-      "description": "A damaged research lab with broken terminals and scattered notes.",
-      "exits": {
-        "west": {
-          "targetRoomId": "lobby",
-          "locked": false
-        }
-      },
-      "items": ["scrap_metal", "research_notes"],
-      "enemies": [
-        {
-          "id": "clicker_1",
-          "name": "clicker",
-          "description": "A blind creature stands motionless near the examination table, clicking softly.",
-          "type": "CLICKER"
-        }
       ],
-      "interactables": [
-        {
-          "id": "terminal",
-          "name": "terminal",
-          "description": "A security terminal with a cracked but active screen.",
-          "requiredItemId": null,
-          "requiredFlag": "power_restored",
-          "setsFlag": "terminal_prompt_active",
-          "successMessage": "The terminal flickers to life. ACCESS CODE REQUIRED.",
-          "failureMessage": "The terminal has no power."
-        }
-      ]
+      "npcs": []
     },
     {
       "id": "boss_room",
-      "description": "A sealed laboratory where Dr. Zaun waits in the shadows.",
+      "description": "A sealed laboratory lined with cracked containment chambers. In the center stands Dr. Zaun, illuminated by the amber glow of a massive tank.",
       "exits": {
         "south": {
           "targetRoomId": "lobby",
@@ -125,8 +155,9 @@
           "locked": true
         }
       },
-
-      "items": ["keycard"],
+      "items": [],
+      "enemies": [],
+      "interactables": [],
       "npcs": [
         {
           "id": "zaun",
@@ -136,12 +167,12 @@
             {
               "requiredFlag": null,
               "forbiddenFlag": "zaun_encounter_started",
-              "text": "Dr. Zaun steps forward. \"You finally made it. You think this is a disaster... but it's evolution.\""
+              "text": "Dr. Zaun steps forward, smiling faintly. \"You finally made it. You think this place is a tomb, but it is only the cradle of what comes next.\""
             },
             {
               "requiredFlag": "zaun_encounter_started",
               "forbiddenFlag": "zaun_defeated",
-              "text": "Zaun watches you silently as the chamber trembles around you."
+              "text": "Zaun watches you silently through the chaos, as if studying the result of an experiment."
             },
             {
               "requiredFlag": "zaun_defeated",
@@ -154,58 +185,110 @@
     },
     {
       "id": "exit_room",
-      "description": "A final escape route leading outside the facility.",
+      "description": "A narrow emergency escape corridor ending in a reinforced fire escape hatch. Beyond it lies the ruined city.",
       "exits": {
         "south": {
           "targetRoomId": "boss_room",
           "locked": false
         }
       },
-      "items": []
+      "items": [],
+      "enemies": [],
+      "interactables": [
+        {
+          "id": "fire_escape",
+          "name": "fire escape",
+          "description": "A locked emergency hatch leading outside.",
+          "requiredItemId": "keycard",
+          "requiredFlag": null,
+          "setsFlag": "ending_survival",
+          "successMessage": "You swipe the keycard. The hatch unlocks with a metallic clang. Fresh air rushes in. You and Emily disappear into the ruined city. ENDING: SURVIVAL",
+          "failureMessage": "The hatch is locked. A keycard reader blinks red beside the handle."
+        }
+      ],
+      "npcs": []
     }
   ],
   "items": [
     {
       "id": "notebook",
       "name": "notebook",
-      "description": "The notebook is written in your own handwriting. One line is underlined twice: 'Find the truth. Trust no one. Especially not Dr. Zaun.' In the margin you see a number sequence: 7314.",
+      "description": "The notebook is written in your own handwriting. One line is underlined twice: 'Find the truth. Trust no one. Especially not Dr. Zaun.' In the margin you see half of a code: 73.",
       "is_portable": true
     },
     {
       "id": "flashlight",
       "name": "flashlight",
-      "description": "A flashlight with moderate battery life.",
+      "description": "A heavy-duty flashlight. The battery is weak, but the beam is still sharp enough to disorient something in the dark.",
       "is_portable": true
     },
     {
       "id": "bandages",
       "name": "bandages",
-      "description": "Clean bandages that may be useful later.",
-      "is_portable": true
-    },
-    {
-      "id": "scrap_metal",
-      "name": "scrap metal",
-      "description": "A piece of scrap metal. Could be used to make a weapon.",
-      "is_portable": true
-    },
-    {
-      "id": "fuel_canister",
-      "name": "fuel canister",
-      "description": "A heavy fuel canister used to restore generator power.",
+      "description": "A bundle of clean bandages taken from the exam room supply cart.",
       "is_portable": true
     },
     {
       "id": "research_notes",
       "name": "research notes",
-      "description": "The notes describe NV-1 as an experimental gene therapy that failed catastrophically. One page mentions a terminal override tied to internal security protocols.",
+      "description": "The notes describe NV-1 as an unstable neuro-regenerative therapy. A stamped page references terminal override access. At the bottom of the page, half a code is scribbled in red ink: 14.",
+      "is_portable": true
+    },
+    {
+      "id": "fuel_canister",
+      "name": "fuel canister",
+      "description": "A heavy canister of emergency diesel fuel. It should be enough to restart the backup generator.",
+      "is_portable": true
+    },
+    {
+      "id": "scrap_metal",
+      "name": "scrap metal",
+      "description": "A jagged strip of bent steel. Crude, but heavy enough to use as an improvised weapon.",
+      "is_portable": true
+    },
+    {
+      "id": "broken_bottle",
+      "name": "broken bottle",
+      "description": "A shattered laboratory bottle with a sharp glass neck. Desperate, but better than empty hands.",
       "is_portable": true
     },
     {
       "id": "keycard",
       "name": "keycard",
-      "description": "A security keycard with high-level clearance.",
+      "description": "A high-level security keycard bearing Dr. Zaun's clearance mark.",
       "is_portable": true
+    }
+  ],
+  "zaun_phases": [
+    {
+      "phase": 1,
+      "message": "Zaun releases the first wave. Three zombified humans stagger out from shattered containment chambers.",
+      "enemies": [
+        {
+          "type": "STANDARD_INFECTED",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "phase": 2,
+      "message": "Another containment line opens. Two clickers emerge, heads twitching toward the slightest sound.",
+      "enemies": [
+        {
+          "type": "CLICKER",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "phase": 3,
+      "message": "Metal locks snap open around the chamber. A pack of rippers bursts from the lower cages.",
+      "enemies": [
+        {
+          "type": "RIPPER",
+          "count": 4
+        }
+      ]
     }
   ]
 }

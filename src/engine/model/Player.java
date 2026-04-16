@@ -6,10 +6,16 @@ public class Player {
 
     private Room currentRoom;
     private List<Item> inventory;
+    private boolean injured;
+    private int turnsUntilDeath;
+    private boolean alive;
 
     public Player(Room currentRoom, List<Item> inventory) {
         this.currentRoom = currentRoom;
         this.inventory = inventory;
+        this.injured = false;
+        this.turnsUntilDeath = 0;
+        this.alive = true;
     }
 
     public Room getCurrentRoom() {
@@ -37,5 +43,36 @@ public class Player {
 
     public List<Item> getInventory() {
         return inventory;
+    }
+
+    public boolean isInjured() {
+        return injured;
+    }
+
+    public int getTurnsUntilDeath() {
+        return turnsUntilDeath;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void injure() {
+        this.injured = true;
+        this.turnsUntilDeath = 1;
+    }
+
+    public void decrementDeathCounter() {
+        if (injured && turnsUntilDeath > 0) {
+            turnsUntilDeath--;
+            if (turnsUntilDeath == 0) {
+                alive = false;
+            }
+        }
+    }
+
+    public void heal() {
+        this.injured = false;
+        this.turnsUntilDeath = 0;
     }
 }

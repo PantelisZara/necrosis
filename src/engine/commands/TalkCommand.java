@@ -17,6 +17,10 @@ public class TalkCommand implements InterfaceCommand {
             return;
         }
 
+        if (engine.systems.ThreatSystem.triggerEnemyAttack(gameState, "talk")) {
+            return;
+        }
+
         String target = String.join(" ", args).toLowerCase().trim();
 
         if (target.startsWith("to ")) {
