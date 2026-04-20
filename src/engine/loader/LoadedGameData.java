@@ -10,10 +10,12 @@ public class LoadedGameData {
 
     private final Map<String, Room> rooms;
     private final List<ZaunPhase> zaunPhases;
+    private final List<String> introLines;
 
-    public LoadedGameData(Map<String, Room> rooms, List<ZaunPhase> zaunPhases) {
+    public LoadedGameData(Map<String, Room> rooms, List<ZaunPhase> zaunPhases, List<String> introLines) {
         this.rooms = rooms;
         this.zaunPhases = zaunPhases;
+        this.introLines = introLines;
     }
 
     public Map<String, Room> getRooms() {
@@ -22,5 +24,9 @@ public class LoadedGameData {
 
     public List<ZaunPhase> getZaunPhases() {
         return zaunPhases;
+    }
+
+    public List<String> getIntroLines() {
+        return introLines;
     }
 }

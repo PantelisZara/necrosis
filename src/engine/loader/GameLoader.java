@@ -18,6 +18,11 @@ public class GameLoader {
             Type type = new TypeToken<Map<String, Object>>() {}.getType();
             Map<String, Object> data = gson.fromJson(reader, type);
 
+            List<String> introLines = (List<String>) data.get("intro");
+            if (introLines == null) {
+                introLines = new ArrayList<>();
+            }
+
             Map<String, Room> rooms = new HashMap<>();
 
             List<Map<String, Object>> roomList = (List<Map<String, Object>>) data.get("rooms");
@@ -46,7 +51,7 @@ public class GameLoader {
                     String id = (String) r.get("id");
                     String desc = (String) r.get("description");
 
-                    // EXITS
+
                     Map<String, Exit> exits = new HashMap<>();
                     Map<String, Object> rawExits = (Map<String, Object>) r.get("exits");
 
@@ -187,11 +192,11 @@ public class GameLoader {
                 }
             }
 
-            return new LoadedGameData(rooms, zaunPhases);
+            return new LoadedGameData(rooms, zaunPhases, introLines);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new LoadedGameData(new HashMap<>(), new ArrayList<>());
+            return new LoadedGameData(new HashMap<>(), new ArrayList<>(), new ArrayList<>());
         }
     }
 }

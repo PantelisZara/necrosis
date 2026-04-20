@@ -64,18 +64,6 @@ public class Room {
         return false;
     }
 
-    public Enemy findActiveEnemyByName(String enemyName) {
-        for (Enemy enemy : enemies) {
-            if (!enemy.isDefeated() && enemy.getName().toLowerCase().equals(enemyName.toLowerCase())) {
-                return enemy;
-            }
-        }
-        return null;
-    }
-
-    public List<Interactable> getInteractables() {
-        return interactables;
-    }
 
     public Interactable findInteractableByName(String name) {
         for (Interactable interactable : interactables) {

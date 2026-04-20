@@ -25,7 +25,7 @@ public class CommandCutter {
 
         List<String> tokens = Arrays.asList(input.split("\\s+"));
 
-        String commandKey = null;
+        String commandKey;
         List<String> args;
 
         if (tokens.size() >= 2) {

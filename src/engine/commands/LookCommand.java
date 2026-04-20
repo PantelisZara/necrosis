@@ -17,6 +17,7 @@ public class LookCommand implements InterfaceCommand {
         Room currentRoom = gameState.getPlayer().getCurrentRoom();
 
         System.out.println(currentRoom.getDescription());
+        System.out.println("\n");
 
         if (gameState.getPlayer().isInjured()) {
             System.out.println("You are bleeding.");

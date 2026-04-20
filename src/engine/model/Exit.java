@@ -21,8 +21,4 @@ public class Exit {
     public void unlock() {
         this.locked = false;
     }
-
-    public void lock() {
-        this.locked = true;
-    }
 }

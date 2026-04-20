@@ -21,7 +21,7 @@ public class StrikeCommand implements InterfaceCommand {
             return;
         }
 
-        Enemy targetEnemy = resolveTarget(activeEnemies, args, "ripper");
+        Enemy targetEnemy = resolveTarget(activeEnemies, args);
 
         if (targetEnemy == null) {
             return;
@@ -53,10 +53,10 @@ public class StrikeCommand implements InterfaceCommand {
         return activeEnemies;
     }
 
-    private Enemy resolveTarget(List<Enemy> enemies, List<String> args, String defaultName) {
+    private Enemy resolveTarget(List<Enemy> enemies, List<String> args) {
         if (args == null || args.isEmpty()) {
             for (Enemy enemy : enemies) {
-                if (enemy.getName().equalsIgnoreCase(defaultName)) {
+                if (enemy.getName().equalsIgnoreCase("ripper")) {
                     return enemy;
                 }
             }

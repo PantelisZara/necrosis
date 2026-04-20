@@ -43,5 +43,6 @@ public class GoCommand implements InterfaceCommand {
 
         gameState.getPlayer().setCurrentRoom(nextRoom);
         System.out.println("You moved to: " + nextRoom.getDescription());
+
     }
 }

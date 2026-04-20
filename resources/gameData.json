@@ -1,27 +1,66 @@
 {
+  "id": "intro_block",
+  "intro": [
+    "",
+    "=============================================================",
+    "                   Z A U N   B I O M E D I C A L",
+    "                    Containment Facility - NV-1",
+    "=============================================================",
+    "",
+    "Six months ago, Zaun Biomedical announced a breakthrough.",
+    "NV-1 - a neuro-regenerative compound capable of repairing",
+    "catastrophic spinal damage. Human trials began immediately.",
+    "",
+    "Three weeks ago, all contact with the facility went dark.",
+    "No distress signal. No evacuation report. No survivors.",
+    "The official story: a containment failure. An accident.",
+    "",
+    "You were part of the research team.",
+    "You know it wasn't an accident.",
+    "",
+    "You wake up on an examination table with no memory of",
+    "the last 72 hours. A nurse named Emily is standing over you.",
+    "The facility is overrun. The exits are sealed.",
+    "And somewhere in the north wing, Dr. Zaun is still here -",
+    "and he hasn't tried to leave.",
+    "",
+    "-------------------------------------------------------------",
+    "  Type 'look' to examine your surroundings.",
+    "  Type 'look at <item>' to inspect something.",
+    "  Type 'take <item>' to pick something up.",
+    "  Type 'go <direction>' to change rooms.",
+    "  Type 'quit' to exit.",
+    "-------------------------------------------------------------",
+    ""
+  ],
   "rooms": [
     {
       "id": "exam_room",
-      "description": "Cold. The first thing you feel is cold. Then the beeping. A heart monitor, disconnected, cries out in three-second intervals. Emily stands beside the bed, pale and exhausted.",
+      "description": "The EXAM ROOM:\nCold fluorescent lights hum softly above. The examination table where you woke up still stands at the center of the room, its restraints hanging loose at the sides.\nMedical instruments are scattered across a nearby tray - some clean, others... not. A faint metallic smell lingers in the air.\nThe walls are sterile, almost identical from every angle, making the room feel smaller than it should be. A monitor beside the table flickers intermittently, displaying unreadable data.\nYou've been here before. Not long ago.",
       "exits": {
         "north": {
           "targetRoomId": "lobby",
           "locked": false
         }
       },
-      "items": ["broken_bottle", "flashlight", "bandages"],
+      "items": [
+        "broken_bottle",
+        "flashlight",
+        "bandages",
+        "notebook"
+      ],
       "enemies": [],
       "interactables": [],
       "npcs": [
         {
           "id": "emily",
           "name": "emily",
-          "description": "A tired nurse in bloodstained scrubs, trying to hold herself together.",
+          "description": "A nurse in bloodstained scrubs.\nShe looks like she hasn't slept in days, and still she's here.",
           "dialogues": [
             {
               "requiredFlag": null,
               "forbiddenFlag": "power_restored",
-              "text": "Emily looks exhausted, but relieved that you are awake. \"The terminal in the research room may still have security access, but it needs power. If we can get the generator running, we might still have a chance. And if you see Dr. Zaun... don't listen to him.\""
+              "text": "Emily grips your arm before you can stand.\n'Don't move too fast. You were in bad shape when I found you.' She glances toward the door.\n'The generator is dead - no power means no security systems, no locked doors, and no way to access the research terminal in the east wing. We need fuel. I saw a canister in the research lab before things went wrong.'\nShe pauses, voice dropping.\n'And if you run into Dr. Zaun - don't engage. Don't listen to what he says. Just walk away.'"
             }
           ]
         }
@@ -29,7 +68,7 @@
     },
     {
       "id": "lobby",
-      "description": "A ruined central lobby with overturned furniture, shattered monitors, and dried blood across the tiles. The north corridor remains sealed behind a reinforced security door.",
+      "description": "THE CENTRAL LOBBY:\nlooks like the moment of collapse was captured and preserved.\nChairs are overturned mid-flight. A security desk has been torn from its bolts. Dried blood traces long drag-marks across the tile floor, leading nowhere.\nThe monitors above the reception counter are shattered, their frames still warm.\nTo the north, a reinforced security door - thick steel, no visible handle, a red indicator light blinking slowly above it.\nWhatever is behind that door, someone wanted it to stay there.",
       "exits": {
         "south": {
           "targetRoomId": "exam_room",
@@ -52,8 +91,8 @@
       "enemies": [
         {
           "id": "infected_lobby_1",
-          "name": "zombified human",
-          "description": "A staggering infected drags one leg behind it, murmuring fragments of a forgotten sentence.",
+          "name": "standard infected",
+          "description": "What used to be a security guard moves through the lobby with a lurching, broken rhythm.\nOne leg drags uselessly. Its mouth opens and closes around the same syllables, over and over - the remnants of a sentence it no longer understands.\nThis is early-stage NV-1: the higher brain functions are gone, but the body hasn't caught up yet.\nIt is slow. It is weak. And it will not stop until you do.",
           "type": "STANDARD_INFECTED"
         }
       ],
@@ -62,19 +101,23 @@
     },
     {
       "id": "research_room",
-      "description": "A damaged research lab filled with cracked terminals, scattered papers and overturned storage trays. A blind clicker stands near the far wall, listening.",
+      "description": "THE RESEARCH LAB:\nhas been ransacked, but not by the infected - the destruction here is too deliberate.\nFiling cabinets have been emptied and upended. Terminal screens are cracked but not smashed. Papers litter the floor in organized piles, as if someone was sorting through them when they had to stop.",
       "exits": {
         "west": {
           "targetRoomId": "lobby",
           "locked": false
         }
       },
-      "items": ["research_notes", "fuel_canister", "scrap_metal"],
+      "items": [
+        "research_notes",
+        "fuel_canister",
+        "scrap_metal"
+      ],
       "enemies": [
         {
           "id": "clicker_1",
           "name": "clicker",
-          "description": "A blind creature stands motionless near the examination table, clicking softly into the darkness.",
+          "description": "A former researcher, now unrecognizable.\nAdvanced NV-1 infection causes catastrophic neural pressure buildup - eventually the optic nerves fail completely and the eyes fuse shut. What survives develops something else instead: an acute sensitivity to sound and light that borders on sonar.\nThe soft clicking sound it makes is how it maps the room.\nMove quietly.\nOr don't move at all.",
           "type": "CLICKER"
         }
       ],
@@ -82,29 +125,29 @@
         {
           "id": "terminal",
           "name": "terminal",
-          "description": "A security terminal with a cracked but still functional display.",
+          "description": "A security terminal bolted to the eastern wall.\nThe screen is cracked but intact. A faded Zaun Biomedical logo peels from the casing.\nUnder normal circumstances this would control access to the entire north wing - but right now the screen is black and cold.",
           "requiredItemId": null,
           "requiredFlag": "power_restored",
           "setsFlag": "terminal_prompt_active",
-          "successMessage": "The terminal flickers to life. ACCESS CODE REQUIRED.",
-          "failureMessage": "The terminal has no power."
+          "successMessage": "The terminal shudders to life as the power comes back online.\nThe Zaun Biomedical logo flashes once, then dissolves into a single prompt:\n> NORTH WING ACCESS - CLEARANCE CODE REQUIRED\nThe cursor blinks, waiting.",
+          "failureMessage": "The terminal is completely dead.\nWithout power to the facility, it's just a cracked screen and a faded logo."
         }
       ],
       "npcs": [
         {
           "id": "emily",
           "name": "emily",
-          "description": "Emily searches the ruined lab for anything still usable.",
+          "description": "Emily moves carefully around the room, checking the floor before each step.",
           "dialogues": [
             {
               "requiredFlag": "power_restored",
               "forbiddenFlag": "terminal_unlocked",
-              "text": "Emily keeps her voice low. \"If Zaun locked the north wing, the terminal should tell us why. I found references to override protocols in the research records. Check every note carefully.\""
+              "text": "Emily keeps her voice barely above a whisper.\n'The terminal is live. Zaun used a custom access code for the north wing - he didn't trust the standard facility protocols.'\nShe hesitates.\n'I found fragments of it in the research records. Two numbers on separate pages. He split it deliberately. Read everything carefully'"
             },
             {
               "requiredFlag": "terminal_unlocked",
               "forbiddenFlag": null,
-              "text": "Emily reads the glowing terminal screen and goes pale. \"So it was true... NV-1 wasn't an accident. Zaun built this. If that door is open now, then he's waiting for you.\""
+              "text": "Emily stares at the terminal screen without blinking.\nWhen she finally speaks, her voice is hollow.\n'NV-1 wasn't a failed experiment. It was never meant to heal anyone. Zaun built it to do exactly this - and then he stayed behind to watch.'\nShe looks at you.\n'The door is open. He's waiting for you up there. Be careful. He wants you to walk through that door.'"
             }
           ]
         }
@@ -112,19 +155,19 @@
     },
     {
       "id": "generator_room",
-      "description": "A dark generator room filled with diesel fumes, hot metal, and broken machinery. Sparks hiss from an open control panel while something growls in the dark.",
+      "description": "THE GENERATOR ROOM:\nsmells of diesel, burnt wiring, and something organic you don't want to identify.\nEmergency strip lighting along the floor casts everything in dim red.\nThe generator itself - a massive diesel unit the size of a car - sits silent in the center of the room, fuel gauge needle resting on empty.",
       "exits": {
         "east": {
           "targetRoomId": "lobby",
           "locked": false
         }
       },
-      "items": ["notebook"],
+      "items": [],
       "enemies": [
         {
           "id": "ripper_1",
           "name": "ripper",
-          "description": "A hunched, doglike infected prowls near the generator, claws scraping on the concrete floor.",
+          "description": "NV-1 doesn't always destroy - sometimes it rebuilds in the wrong direction entirely.\nIn a small percentage of subjects, the compound triggered extreme musculoskeletal restructuring. The spine shortened. The arms lengthened.\nThe result moves on all fours with terrifying speed and hunts by scent.\nThis one circles the generator in slow, deliberate loops, claws leaving deep gouges in the concrete.\nIt knows you're here.\nIt's deciding when.",
           "type": "RIPPER"
         }
       ],
@@ -132,19 +175,19 @@
         {
           "id": "generator",
           "name": "generator",
-          "description": "A damaged backup generator connected to the facility power grid.",
+          "description": "A Harmon Industrial backup generator - designed to keep the facility running for 72 hours in a blackout.\nSomeone drained it dry. A fuel intake port sits on the side, cap missing.",
           "requiredItemId": "fuel_canister",
           "requiredFlag": null,
           "setsFlag": "power_restored",
-          "successMessage": "You pour the fuel into the generator and restart the system. The lights flicker back to life.",
-          "failureMessage": "The generator won't start without fuel."
+          "successMessage": "You twist the intake cap free and pour the fuel canister into the generator.\nThe machine coughs, kicks, and then catches - a deep mechanical growl that shakes the walls.\nOverhead, the fluorescent lights stutter and flare to life.\nSomewhere in the facility, something hums back to power.",
+          "failureMessage": "The generator won't start.\nThe fuel gauge reads completely empty - you need to find fuel first."
         }
       ],
       "npcs": []
     },
     {
       "id": "boss_room",
-      "description": "A sealed laboratory lined with cracked containment chambers. In the center stands Dr. Zaun, illuminated by the amber glow of a massive tank.",
+      "description": "THE CONTAINMENT LABORATORY:\nEverything here is deliberately ordered - which makes it worse. The bodies are arranged along the walls. The containment chambers are ranked by size, smallest to largest.\nAnd in the center of the room, bathed in the amber glow of a single massive sealed tank, stands Dr. Zaun.\nHe is not panicked. He is not running.\nHe is watching the door as if he has been waiting for exactly this moment, for exactly this long.",
       "exits": {
         "south": {
           "targetRoomId": "lobby",
@@ -162,22 +205,22 @@
         {
           "id": "zaun",
           "name": "zaun",
-          "description": "Dr. Zaun stands before the containment tank, calm and unreadable.",
+          "description": "Dr. Arlen Zaun.\nLead researcher on the NV-1 project. The man who started all of this - and stayed to watch it finish.",
           "dialogues": [
             {
               "requiredFlag": null,
               "forbiddenFlag": "zaun_encounter_started",
-              "text": "Dr. Zaun steps forward, smiling faintly. \"You finally made it. You think this place is a tomb, but it is only the cradle of what comes next.\""
+              "text": "Zaun clasps his hands behind his back, the way a professor would at the front of a lecture hall.\n'You made it further than any of the others. I had hoped you would.'\nHe glances at the containment chambers.\n'You think NV-1 was an accident. A failure. I understand why - that is what the records were designed to suggest.'\nA faint smile.\n'This facility was never a hospital. It was a proof of concept. And you are standing in the results.'"
             },
             {
               "requiredFlag": "zaun_encounter_started",
               "forbiddenFlag": "zaun_defeated",
-              "text": "Zaun watches you silently through the chaos, as if studying the result of an experiment."
+              "text": "Zaun hasn't moved from his position near the tank.\nHe watches the chaos with the calm of someone observing a controlled experiment - which, you realize, is exactly what this is to him."
             },
             {
               "requiredFlag": "zaun_defeated",
               "forbiddenFlag": null,
-              "text": "\"So... you survived them all. Now make your choice.\""
+              "text": "Zaun surveys the stillness of the room. The bodies of his subjects. The shattered chambers.\nHe looks almost satisfied.\n'Remarkable. Every single one.'\nHe turns to face you fully for the first time.\n'I did not build a fail-safe into this facility. I built a selection mechanism. You are what survives.'\nHe spreads his hands.\n'So. What do you do with that?'"
             }
           ]
         }
@@ -185,7 +228,7 @@
     },
     {
       "id": "exit_room",
-      "description": "A narrow emergency escape corridor ending in a reinforced fire escape hatch. Beyond it lies the ruined city.",
+      "description": "THE EXIT ROOM:\nA narrow emergency corridor, stripped of everything non-essential.\nBare concrete walls. A single overhead light.\nAt the far end, a heavy reinforced fire escape hatch sits sealed with a magnetic lock - the kind that needs a high-clearance keycard to release.\nThrough the gaps in the frame you can feel it: cold air. Real air. The city is on the other side of that door.\nWhatever is left of it.",
       "exits": {
         "south": {
           "targetRoomId": "boss_room",
@@ -198,12 +241,12 @@
         {
           "id": "keycard",
           "name": "keycard",
-          "description": "A locked emergency hatch leading outside.",
+          "description": "A reinforced emergency exit hatch.\nThe magnetic lock requires a high-clearance keycard. A small reader blinks red beside the handle.",
           "requiredItemId": "keycard",
           "requiredFlag": null,
           "setsFlag": "ending_survival",
-          "successMessage": "You swipe the keycard. The hatch unlocks with a metallic clang. Fresh air rushes in. You and Emily disappear into the ruined city. ENDING: SURVIVAL",
-          "failureMessage": "The hatch is locked. A keycard reader blinks red beside the handle."
+          "successMessage": "You press Zaun's keycard against the reader.\nA beat of silence - then a heavy magnetic clunk as the lock releases. The hatch swings outward on its own weight.\nCold night air floods the corridor, carrying the smell of smoke and rain and open sky.\nEmily steps through first. You follow. Behind you, the hatch seals shut.\nENDING: SURVIVAL",
+          "failureMessage": "The reader blinks red.\nThe lock holds.\nYou need a high-clearance keycard to open this."
         }
       ],
       "npcs": []
@@ -213,56 +256,56 @@
     {
       "id": "notebook",
       "name": "notebook",
-      "description": "The notebook is written in your own handwriting. Fragments of memory return as you read.\n\n'Subjects in early infection stage remain physically weak. Direct force is effective, but only if you commit fully.'\n\nAnother line is underlined twice: 'Find the truth. Trust no one. Especially not Dr. Zaun.'\n\nIn the margin you see half of a code: 73.",
+      "description": "Emily pressed this into your hands before you were fully awake.\nHer handwriting - hurried but precise, the handwriting of someone who has been keeping notes under pressure for a long time.\nThe cover reads:\n'READ THIS FIRST. ALL OF IT.'\n---\nINFECTED (Stage 1 - the slow ones)\nThey still look human. They're not. The higher brain is gone but the body keeps moving. They're weak and they're slow - a sharp edge is enough. \nThe broken bottle will do it. 'STAB' them before they get close enough to matter.\n---\nCLICKERS (Stage 2 - the blind ones)\nDon't let the stillness fool you. They map everything by sound. Their eyes are fused shut - NV-1 destroyed the optic nerves and sealed them over. \nThat's the weakness: they can't handle sudden light. 'FLASH' them with the flashlight and overload them completely. Get it out before they hear you move.\n---\nRIPPERS (Stage 3 - the fast ones)\nThese don't walk anymore. The mutation restructured the skeleton - they move on all fours and they are fast. Don't try to outrun one.\nThe scrap metal is heavy enough to drop them if you commit to the swing. One solid 'STRIKE' to the skull.\n---\nBRUTES (Stage 3 - the large ones)\nI don't know how to explain this gently so I won't. A bottle won't penetrate. The scrap metal alone won't reach deep enough. \nBut I watched one go down when someone 'COMBINE'd the two - glass edge bound to the metal, something with reach and a real cutting edge. \nMake the blade first. Then 'STAB' it.\n---\nA final line at the bottom of the page, underlined:\n'I wrote this so you don't have to figure it out the hard way -> 73xx",
       "is_portable": true
     },
     {
       "id": "flashlight",
       "name": "flashlight",
-      "description": "A heavy-duty flashlight. The casing is cracked, but the beam is still intense.\n\nA handwritten label is taped to the side:\n'DO NOT APPROACH BLIND SUBJECTS WITHOUT LIGHT — they react violently to sudden brightness.'",
+      "description": "A heavy tactical flashlight - the kind issued to facility security.\nThe casing is cracked along one side but the beam still works, cutting hard and bright.\nSomeone has taped a handwritten warning to the grip:\n'STAGE 2 SUBJECTS - BLIND VARIANTS - EXTREME LIGHT SENSITIVITY. DO NOT APPROACH WITHOUT ILLUMINATION. DIRECT EXPOSURE TRIGGERS ACUTE NEURAL OVERLOAD. SUSTAINED BEAM = TERMINATION.'\nBelow it, in different handwriting, someone added:\n'It works. I tested it.'",
       "is_portable": true
     },
     {
       "id": "bandages",
       "name": "bandages",
-      "description": "A bundle of clean bandages taken from the exam room supply cart.\n\nWhoever left them here knew injuries wouldn't wait.\n\nIf something gets close enough to hurt you, this might be the only thing keeping you alive.",
+      "description": "A sealed roll of sterile bandages from the exam room supply cart.\nSomeone kept this cart fully stocked long after the facility protocols collapsed - Emily, probably.\nThe packaging is torn at one corner. She may have already used some.\nIf something gets close enough to open you up, this is the difference between slowing down and stopping entirely.",
       "is_portable": true
     },
     {
       "id": "research_notes",
       "name": "research notes",
-      "description": "The notes describe NV-1 as an unstable neuro-regenerative therapy.\n\nSeveral entries are marked 'FAILED SUBJECTS':\n- Blind variants exhibit extreme sensitivity to light.\n- Later mutations show increased muscle density and resistance to blunt trauma.\n\nOne section is circled:\n'Glass fragments reinforced with metal increase penetration efficiency.'\n\nAt the bottom of the page, half a code is scribbled in red ink: 14.",
+      "description": "Typed pages, but with heavy handwritten annotations - two different people arguing in the margins.\nThe typed text describes NV-1 as a neuro-regenerative compound designed to repair spinal damage. Several subject entries are marked STAGE TRANSITION and then FAILED:\n'Stage 2: Optic nerve failure confirmed in 100% of surviving subjects. Neural pressure reroutes through auditory cortex. Subjects develop echolocation-adjacent spatial awareness. \nExtreme photosensitivity. Approach only with sustained light source.'\n'Stage 3-A: Skeletal restructuring in 8% of Stage 2 survivors. Quadrupedal adaptation. Massively increased muscle density. Blunt trauma ineffective past a certain threshold - recommend reinforced impact tools.'\nOne section is circled in red ink, the annotation reading 'YOU NEED THIS':\n'Glass-edge weapons reinforced with rigid metal demonstrate significantly improved penetration against Stage 3-A musculature.'\nAt the very bottom, half a code scrawled in red: 14.",
       "is_portable": true
     },
     {
       "id": "fuel_canister",
       "name": "fuel canister",
-      "description": "A heavy canister of emergency diesel fuel. It should be enough to restart the backup generator.",
+      "description": "A yellow emergency diesel canister, still sealed, stenciled with the Zaun Biomedical facility crest.\nHeavy enough that carrying it takes both hands.\nIt should be more than enough to restart the backup generator - assuming the generator itself is still intact.",
       "is_portable": true
     },
     {
       "id": "scrap_metal",
       "name": "scrap metal",
-      "description": "A jagged strip of bent steel. Heavy, unbalanced, but solid.\n\nYou notice dents and dark stains along the edge — someone has used it before to strike something that fought back.\n\nIt could break bone... or reinforce something sharper.",
+      "description": "A heavy strip of structural steel, probably torn from a shelf bracket or door frame.\nJagged on one end. The other end has been wrapped in torn fabric - improvised grip.\nThe dents along the flat edge are deep and irregular. This has been used before, against something that hit back. The dark staining isn't rust.\nOn its own it's a bludgeon.\nBut the research notes mentioned something about reinforced glass edges. Combined with the right material, this could become something more deliberate.",
       "is_portable": true
     },
     {
       "id": "broken_bottle",
       "name": "broken bottle",
-      "description": "A shattered laboratory bottle with a sharp glass neck. Desperate, but better than empty hands.",
+      "description": "A thick laboratory reagent bottle, shattered cleanly at the neck.\nThe remaining glass is dense and sharp - not elegant, but the edge holds. You've used worse.\nIt won't last long and it won't reach deep on its own.\nBut the notes were specific about glass edges reinforced with metal. If you had something rigid to bind it to, you could make this into a real weapon.",
       "is_portable": true
     },
     {
       "id": "keycard",
       "name": "keycard",
-      "description": "A high-level security keycard bearing Dr. Zaun's clearance mark.\n\nThe embedded chip flickers faintly, still active.\n\nIf there's any way out of this place, this will open it.",
+      "description": "A matte black security keycard.\nNo name - just a clearance level printed in small text: OMEGA-7. Zaun's level. The highest in the facility.\nThe embedded chip pulses faintly when you hold it under light, still drawing power from somewhere.\nWhatever locks are still tied to this facility's magnetic system, this will open them.\nThere is only one door left that requires it.",
       "is_portable": true
     }
   ],
   "zaun_phases": [
     {
       "phase": 1,
-      "message": "Zaun releases the first wave. Three zombified humans stagger out from shattered containment chambers.",
+      "message": "Zaun moves to the first containment column and enters a code without looking at the keypad.\nHe has done this before.\nThe chamber seals disengage with a pressurized hiss and three figures stumble forward - slow, broken, still wearing what they arrived in. Stage 1. Early infection.\nHe watches them the way you'd watch a timer run down.",
       "enemies": [
         {
           "type": "STANDARD_INFECTED",
@@ -272,7 +315,7 @@
     },
     {
       "phase": 2,
-      "message": "Another containment line opens. Two clickers emerge, heads twitching toward the slightest sound.",
+      "message": "Zaun turns to the next column without a word.\nThese chambers are darker.\nThe moment the seals release, the sound begins - a rapid, rhythmic clicking that fills the room like static. Two figures emerge.\nTheir faces are wrong: eye sockets sealed shut beneath fused scar tissue, heads tilting in sharp precise angles as they map the room by sound alone.\nStage 2.\nHe has been keeping them fed.",
       "enemies": [
         {
           "type": "CLICKER",
@@ -282,7 +325,7 @@
     },
     {
       "phase": 3,
-      "message": "The final containment locks rupture. Something much larger than the others drags itself out of the shattered chamber.",
+      "message": "The final chamber is the largest.\nThe door is reinforced with additional bolts that Zaun unlocks one by one, methodically, like he is unwrapping something precious.\nWhen it finally opens, the sound precedes the thing itself - a low, grinding drag of something massive moving on all fours.\nIt fills the doorframe.\nWhat NV-1 does to most subjects in six days, it has done to this one completely. The bones restructured. The muscle density is extraordinary.\nIt does not hesitate.",
       "enemies": [
         {
           "type": "BRUTE",

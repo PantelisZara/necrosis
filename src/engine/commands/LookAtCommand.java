@@ -16,17 +16,18 @@ public class LookAtCommand implements InterfaceCommand {
         }
 
         String targetName = String.join(" ", args).toLowerCase();
-
         Room currentRoom = gameState.getPlayer().getCurrentRoom();
 
-        for (Item item : currentRoom.getItems()) {                           //for room
+
+
+        for (Item item : currentRoom.getItems()) {
             if (item.getName().toLowerCase().equals(targetName)) {
                 System.out.println(item.getDescription());
                 return;
             }
         }
 
-        for (Item item : gameState.getPlayer().getInventory()) {              //for inventory
+        for (Item item : gameState.getPlayer().getInventory()) {
             if (item.getName().toLowerCase().equals(targetName)) {
                 System.out.println(item.getDescription());
                 return;

@@ -1,23 +1,43 @@
 import engine.commands.*;
 import engine.core.CurrentGameState;
 import engine.loader.GameLoader;
+import engine.loader.LoadedGameData;
 import engine.model.Player;
 import engine.model.Room;
 import engine.parser.CommandCutter;
-import engine.loader.LoadedGameData;
+import ui.GameWindow;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.*;
 
-//early testing game loop
+
 public class Main {
 
-    public static void main() {
+    public static void main(String[] args) {
+
+
+        GameWindow window = new GameWindow();
+        window.setVisible(true);
+
+
+        System.setOut(new PrintStream(new OutputStream() {
+            @Override
+            public void write(int b) {
+                window.appendOutput(String.valueOf((char) b));
+            }
+        }));
+
 
         LoadedGameData loadedData = GameLoader.loadGameData("resources/gameData.json");
+
+        for (String line : loadedData.getIntroLines()) {
+            System.out.println(line);
+        }
+
         Map<String, Room> allRooms = loadedData.getRooms();
 
         Room startRoom = allRooms.get("exam_room");
-
         if (startRoom == null) {
             System.out.println("Start room could not be loaded.");
             return;
@@ -25,8 +45,8 @@ public class Main {
 
         Player player = new Player(startRoom, new ArrayList<>());
         CurrentGameState gameState = new CurrentGameState(allRooms, player);
-
         gameState.setZaunPhases(loadedData.getZaunPhases());
+
 
         CommandCutter parser = new CommandCutter();
 
@@ -45,24 +65,39 @@ public class Main {
         parser.registerCommand(new StabCommand(), "stab");
         parser.registerCommand(new CombineCommand(), "combine");
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Type 'go <direction>' to move.");
+
+        window.setInputHandler(e -> {
+            String input = window.getInput().trim();
+            window.clearInput();
+            System.out.println("\n");
 
 
-        while (true) {
 
-            System.out.print("> ");
-            String input = scanner.nextLine().trim();
+            if (input.isEmpty()) {
+                return;
+            }
 
-            if (input.equalsIgnoreCase("quit") || input.equalsIgnoreCase("exit")) {
+
+            if (input.equalsIgnoreCase("quit")) {
                 System.out.println("Thanks for playing!");
-                break;
+                System.exit(0);
             }
 
             parser.parse_Execute(input, gameState);
+
+
+            if (gameState.isFlagTrue("ending_survival")
+                    || gameState.isFlagTrue("ending_cure")
+                    || gameState.isFlagTrue("ending_evolution")) {
+
+                System.out.println();
+                System.out.println("Thanks for playing!");
+
+            }
+
+
         }
-
-        scanner.close();
+        );
     }
-}
 
+}
