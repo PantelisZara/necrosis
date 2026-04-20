@@ -30,7 +30,7 @@ public class Main {
 
         CommandCutter parser = new CommandCutter();
 
-        parser.registerCommand(new GoCommand(), "go", "move");
+        parser.registerCommand(new GoCommand(), "go", "move", "run");
         parser.registerCommand(new InventoryCommand(), "inv", "inventory");
         parser.registerCommand(new TakeCommand(), "take", "grab", "hold", "pick up");
         parser.registerCommand(new LookCommand(), "look", "view");
@@ -39,11 +39,15 @@ public class Main {
         parser.registerCommand(new ReadCommand(), "read");
         parser.registerCommand(new EnterCommand(), "enter");
         parser.registerCommand(new TalkCommand(), "talk", "talk to");
-        parser.registerCommand(new DealWithCommand(), "deal with");
         parser.registerCommand(new ChooseCommand(), "choose");
+        parser.registerCommand(new FlashCommand(), "flash");
+        parser.registerCommand(new StrikeCommand(), "strike");
+        parser.registerCommand(new StabCommand(), "stab");
+        parser.registerCommand(new CombineCommand(), "combine");
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Type 'go <direction>' to move.");
+
 
         while (true) {
 
@@ -61,3 +65,4 @@ public class Main {
         scanner.close();
     }
 }
+

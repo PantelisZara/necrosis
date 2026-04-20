@@ -61,6 +61,13 @@ public class UseCommand implements InterfaceCommand {
             gameState.setFlag(interactable.getSetsFlag(), true);
         }
 
+        if ("ending_survival".equals(interactable.getSetsFlag())) {
+            System.out.println("You escape the facility.");
+            System.out.println("The cold air hits your lungs as you step outside.");
+            System.out.println("Somewhere behind you, the lab goes silent.");
+            System.out.println("ENDING: SURVIVAL");
+        }
+
 
 
         System.out.println(interactable.getSuccessMessage());
@@ -88,5 +95,10 @@ public class UseCommand implements InterfaceCommand {
 
         System.out.println("You quickly wrap your wounds with the bandages.");
         System.out.println("You are no longer bleeding.");
+    }
+
+    private void useKeycard(CurrentGameState gameState) {
+
+
     }
 }

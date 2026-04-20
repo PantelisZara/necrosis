@@ -9,7 +9,7 @@
           "locked": false
         }
       },
-      "items": ["notebook", "flashlight", "bandages"],
+      "items": ["broken_bottle", "flashlight", "bandages"],
       "enemies": [],
       "interactables": [],
       "npcs": [
@@ -69,7 +69,7 @@
           "locked": false
         }
       },
-      "items": ["research_notes", "fuel_canister", "scrap_metal", "broken_bottle"],
+      "items": ["research_notes", "fuel_canister", "scrap_metal"],
       "enemies": [
         {
           "id": "clicker_1",
@@ -119,7 +119,7 @@
           "locked": false
         }
       },
-      "items": [],
+      "items": ["notebook"],
       "enemies": [
         {
           "id": "ripper_1",
@@ -196,8 +196,8 @@
       "enemies": [],
       "interactables": [
         {
-          "id": "fire_escape",
-          "name": "fire escape",
+          "id": "keycard",
+          "name": "keycard",
           "description": "A locked emergency hatch leading outside.",
           "requiredItemId": "keycard",
           "requiredFlag": null,
@@ -213,25 +213,25 @@
     {
       "id": "notebook",
       "name": "notebook",
-      "description": "The notebook is written in your own handwriting. One line is underlined twice: 'Find the truth. Trust no one. Especially not Dr. Zaun.' In the margin you see half of a code: 73.",
+      "description": "The notebook is written in your own handwriting. Fragments of memory return as you read.\n\n'Subjects in early infection stage remain physically weak. Direct force is effective, but only if you commit fully.'\n\nAnother line is underlined twice: 'Find the truth. Trust no one. Especially not Dr. Zaun.'\n\nIn the margin you see half of a code: 73.",
       "is_portable": true
     },
     {
       "id": "flashlight",
       "name": "flashlight",
-      "description": "A heavy-duty flashlight. The battery is weak, but the beam is still sharp enough to disorient something in the dark.",
+      "description": "A heavy-duty flashlight. The casing is cracked, but the beam is still intense.\n\nA handwritten label is taped to the side:\n'DO NOT APPROACH BLIND SUBJECTS WITHOUT LIGHT — they react violently to sudden brightness.'",
       "is_portable": true
     },
     {
       "id": "bandages",
       "name": "bandages",
-      "description": "A bundle of clean bandages taken from the exam room supply cart.",
+      "description": "A bundle of clean bandages taken from the exam room supply cart.\n\nWhoever left them here knew injuries wouldn't wait.\n\nIf something gets close enough to hurt you, this might be the only thing keeping you alive.",
       "is_portable": true
     },
     {
       "id": "research_notes",
       "name": "research notes",
-      "description": "The notes describe NV-1 as an unstable neuro-regenerative therapy. A stamped page references terminal override access. At the bottom of the page, half a code is scribbled in red ink: 14.",
+      "description": "The notes describe NV-1 as an unstable neuro-regenerative therapy.\n\nSeveral entries are marked 'FAILED SUBJECTS':\n- Blind variants exhibit extreme sensitivity to light.\n- Later mutations show increased muscle density and resistance to blunt trauma.\n\nOne section is circled:\n'Glass fragments reinforced with metal increase penetration efficiency.'\n\nAt the bottom of the page, half a code is scribbled in red ink: 14.",
       "is_portable": true
     },
     {
@@ -243,7 +243,7 @@
     {
       "id": "scrap_metal",
       "name": "scrap metal",
-      "description": "A jagged strip of bent steel. Crude, but heavy enough to use as an improvised weapon.",
+      "description": "A jagged strip of bent steel. Heavy, unbalanced, but solid.\n\nYou notice dents and dark stains along the edge — someone has used it before to strike something that fought back.\n\nIt could break bone... or reinforce something sharper.",
       "is_portable": true
     },
     {
@@ -255,7 +255,7 @@
     {
       "id": "keycard",
       "name": "keycard",
-      "description": "A high-level security keycard bearing Dr. Zaun's clearance mark.",
+      "description": "A high-level security keycard bearing Dr. Zaun's clearance mark.\n\nThe embedded chip flickers faintly, still active.\n\nIf there's any way out of this place, this will open it.",
       "is_portable": true
     }
   ],
@@ -282,11 +282,11 @@
     },
     {
       "phase": 3,
-      "message": "Metal locks snap open around the chamber. A pack of rippers bursts from the lower cages.",
+      "message": "The final containment locks rupture. Something much larger than the others drags itself out of the shattered chamber.",
       "enemies": [
         {
-          "type": "RIPPER",
-          "count": 4
+          "type": "BRUTE",
+          "count": 1
         }
       ]
     }

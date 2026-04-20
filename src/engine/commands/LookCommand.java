@@ -18,6 +18,10 @@ public class LookCommand implements InterfaceCommand {
 
         System.out.println(currentRoom.getDescription());
 
+        if (gameState.getPlayer().isInjured()) {
+            System.out.println("You are bleeding.");
+        }
+
         List<Item> items = currentRoom.getItems();
         if (items == null || items.isEmpty()) {
             System.out.println("There are no items here.");
@@ -55,5 +59,8 @@ public class LookCommand implements InterfaceCommand {
             System.out.println("Npcs:");
             System.out.println("- " + npc.getName());
         }
+
+
+
     }
 }
