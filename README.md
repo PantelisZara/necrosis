@@ -1,4 +1,5 @@
 # Necrosis – Text-Based Adventure Engine (Java)
+<img width="1774" height="887" alt="necrosis_logo" src="https://github.com/user-attachments/assets/d0f67522-bae5-4c40-bbed-a2f6cdbc4875" />
 
 ## University Project
 
