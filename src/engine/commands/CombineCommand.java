@@ -41,16 +41,14 @@ public class CombineCommand implements InterfaceCommand {
             return;
         }
 
+        Item improvisedBlade = gameState.createItemById("improvised_blade");
+        if (improvisedBlade == null) {
+            System.out.println("The improvised blade item is missing from the game data.");
+            return;
+        }
+
         gameState.getPlayer().removeItem(brokenBottle);
         gameState.getPlayer().removeItem(scrapMetal);
-
-        Item improvisedBlade = new Item(
-                "improvised_blade",
-                "improvised blade",
-                "A crude but deadly improvised blade made from broken glass and sharpened scrap metal.",
-                true
-        );
-
         gameState.getPlayer().addItem(improvisedBlade);
 
         System.out.println("You combine the broken bottle with the scrap metal.");

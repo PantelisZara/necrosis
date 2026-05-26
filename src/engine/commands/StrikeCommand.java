@@ -32,13 +32,20 @@ public class StrikeCommand implements InterfaceCommand {
             return;
         }
 
-        if (gameState.getPlayer().findItemById("scrap_metal") == null) {
-            System.out.println("You need something heavy to strike the ripper with.");
+        boolean hasScrapMetal = gameState.getPlayer().findItemById("scrap_metal") != null;
+        boolean hasImprovisedBlade = gameState.getPlayer().findItemById("improvised_blade") != null;
+
+        if (!hasScrapMetal && !hasImprovisedBlade) {
+            System.out.println("You need something heavy or sharp enough to strike the ripper with.");
             return;
         }
 
         targetEnemy.defeat();
-        System.out.println("You swing the scrap metal with all your strength.");
+        if (hasScrapMetal) {
+            System.out.println("You swing the scrap metal with all your strength.");
+        } else {
+            System.out.println("You strike with the improvised blade before the ripper can dodge.");
+        }
         System.out.println("The ripper collapses with a final shriek.");
         ZaunEncounterSystem.advanceIfNeeded(gameState);
     }

@@ -1,202 +1,284 @@
 package engine.loader;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import engine.model.*;
+import com.google.gson.annotations.SerializedName;
+import engine.model.DialogueEntry;
+import engine.model.Enemy;
+import engine.model.EnemySpawn;
+import engine.model.EnemyType;
+import engine.model.Exit;
+import engine.model.Interactable;
+import engine.model.Item;
+import engine.model.Npc;
+import engine.model.Room;
+import engine.model.ZaunPhase;
 
 import java.io.FileReader;
-import java.lang.reflect.Type;
-import java.util.*;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GameLoader {
 
     public static LoadedGameData loadGameData(String filePath) {
-        try {
+        try (Reader reader = new FileReader(filePath)) {
             Gson gson = new Gson();
-            FileReader reader = new FileReader(filePath);
+            GameFileData data = gson.fromJson(reader, GameFileData.class);
 
-            Type type = new TypeToken<Map<String, Object>>() {}.getType();
-            Map<String, Object> data = gson.fromJson(reader, type);
-
-            List<String> introLines = (List<String>) data.get("intro");
-            if (introLines == null) {
-                introLines = new ArrayList<>();
+            if (data == null) {
+                return LoadedGameData.empty();
             }
 
-            Map<String, Room> rooms = new HashMap<>();
+            List<String> introLines = data.intro != null ? data.intro : new ArrayList<>();
+            Map<String, Item> allItems = buildItemTemplates(data.items);
+            Map<String, Room> rooms = buildRooms(data.rooms, allItems);
+            List<ZaunPhase> zaunPhases = buildZaunPhases(data.zaunPhases);
+            GameConfig gameConfig = data.gameConfig != null ? data.gameConfig : new GameConfig();
 
-            List<Map<String, Object>> roomList = (List<Map<String, Object>>) data.get("rooms");
-            List<Map<String, Object>> itemList = (List<Map<String, Object>>) data.get("items");
-            List<Map<String, Object>> phaseList = (List<Map<String, Object>>) data.get("zaun_phases");
+            return new LoadedGameData(rooms, zaunPhases, introLines, gameConfig, allItems);
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            return LoadedGameData.empty();
+        }
+    }
 
-            Map<String, Item> allItems = new HashMap<>();
+    private static Map<String, Item> buildItemTemplates(List<ItemData> itemList) {
+        Map<String, Item> allItems = new HashMap<>();
 
-            if (itemList != null) {
-                for (Map<String, Object> i : itemList) {
-                    String id = (String) i.get("id");
-                    String name = (String) i.get("name");
-                    String desc = (String) i.get("description");
+        if (itemList == null) {
+            return allItems;
+        }
 
-                    Boolean portableValue = (Boolean) i.get("is_portable");
-                    boolean isPortable = portableValue != null ? portableValue : true;
+        for (ItemData itemData : itemList) {
+            boolean isPortable = itemData.isPortable == null || itemData.isPortable;
+            allItems.put(
+                    itemData.id,
+                    new Item(itemData.id, itemData.name, itemData.description, isPortable)
+            );
+        }
 
-                    allItems.put(id, new Item(id, name, desc, isPortable));
-                }
+        return allItems;
+    }
+
+    private static Map<String, Room> buildRooms(List<RoomData> roomList, Map<String, Item> allItems) {
+        Map<String, Room> rooms = new HashMap<>();
+
+        if (roomList == null) {
+            return rooms;
+        }
+
+        for (RoomData roomData : roomList) {
+            rooms.put(roomData.id, new Room(
+                    roomData.id,
+                    roomData.description,
+                    buildExits(roomData.exits),
+                    buildRoomItems(roomData.items, allItems),
+                    buildEnemies(roomData.enemies),
+                    buildInteractables(roomData.interactables),
+                    buildNpcs(roomData.npcs)
+            ));
+        }
+
+        return rooms;
+    }
+
+    private static Map<String, Exit> buildExits(Map<String, ExitData> exitData) {
+        Map<String, Exit> exits = new HashMap<>();
+
+        if (exitData == null) {
+            return exits;
+        }
+
+        for (Map.Entry<String, ExitData> entry : exitData.entrySet()) {
+            ExitData exit = entry.getValue();
+            boolean locked = exit.locked != null && exit.locked;
+            exits.put(entry.getKey(), new Exit(exit.targetRoomId, locked));
+        }
+
+        return exits;
+    }
+
+    private static List<Item> buildRoomItems(List<String> itemIds, Map<String, Item> allItems) {
+        List<Item> roomItems = new ArrayList<>();
+
+        if (itemIds == null) {
+            return roomItems;
+        }
+
+        for (String itemId : itemIds) {
+            Item item = allItems.get(itemId);
+            if (item != null) {
+                roomItems.add(item);
             }
+        }
 
+        return roomItems;
+    }
 
-            if (roomList != null) {
-                for (Map<String, Object> r : roomList) {
-                    String id = (String) r.get("id");
-                    String desc = (String) r.get("description");
+    private static List<Enemy> buildEnemies(List<EnemyData> enemyList) {
+        List<Enemy> enemies = new ArrayList<>();
 
+        if (enemyList == null) {
+            return enemies;
+        }
 
-                    Map<String, Exit> exits = new HashMap<>();
-                    Map<String, Object> rawExits = (Map<String, Object>) r.get("exits");
+        for (EnemyData enemyData : enemyList) {
+            enemies.add(new Enemy(
+                    enemyData.id,
+                    enemyData.name,
+                    enemyData.description,
+                    EnemyType.valueOf(enemyData.type.toUpperCase())
+            ));
+        }
 
-                    if (rawExits != null) {
-                        for (Map.Entry<String, Object> entry : rawExits.entrySet()) {
-                            String direction = entry.getKey();
-                            Map<String, Object> exitData = (Map<String, Object>) entry.getValue();
+        return enemies;
+    }
 
-                            String targetRoomId = (String) exitData.get("targetRoomId");
-                            Boolean lockedValue = (Boolean) exitData.get("locked");
-                            boolean locked = lockedValue != null && lockedValue;
+    private static List<Interactable> buildInteractables(List<InteractableData> interactableList) {
+        List<Interactable> interactables = new ArrayList<>();
 
-                            exits.put(direction, new Exit(targetRoomId, locked));
-                        }
-                    }
+        if (interactableList == null) {
+            return interactables;
+        }
 
+        for (InteractableData inter : interactableList) {
+            interactables.add(new Interactable(
+                    inter.id,
+                    inter.name,
+                    inter.description,
+                    inter.requiredItemId,
+                    inter.requiredFlag,
+                    inter.setsFlag,
+                    inter.successMessage,
+                    inter.failureMessage
+            ));
+        }
 
-                    List<Item> roomItems = new ArrayList<>();
-                    List<String> itemIds = (List<String>) r.get("items");
+        return interactables;
+    }
 
-                    if (itemIds != null) {
-                        for (String itemId : itemIds) {
-                            Item item = allItems.get(itemId);
-                            if (item != null) {
-                                roomItems.add(item);
-                            }
-                        }
-                    }
+    private static List<Npc> buildNpcs(List<NpcData> npcList) {
+        List<Npc> npcs = new ArrayList<>();
 
+        if (npcList == null) {
+            return npcs;
+        }
 
-                    List<Enemy> roomEnemies = new ArrayList<>();
-                    List<Map<String, Object>> enemyList = (List<Map<String, Object>>) r.get("enemies");
+        for (NpcData npcData : npcList) {
+            List<DialogueEntry> dialogues = new ArrayList<>();
 
-                    if (enemyList != null) {
-                        for (Map<String, Object> e : enemyList) {
-                            String enemyId = (String) e.get("id");
-                            String enemyName = (String) e.get("name");
-                            String enemyDescription = (String) e.get("description");
-                            String enemyTypeString = (String) e.get("type");
-
-                            EnemyType enemyType = EnemyType.valueOf(enemyTypeString.toUpperCase());
-
-                            roomEnemies.add(new Enemy(enemyId, enemyName, enemyDescription, enemyType));
-                        }
-                    }
-
-
-                    List<Interactable> roomInteractables = new ArrayList<>();
-                    List<Map<String, Object>> interactableList =
-                            (List<Map<String, Object>>) r.get("interactables");
-
-                    if (interactableList != null) {
-                        for (Map<String, Object> inter : interactableList) {
-                            String interactableId = (String) inter.get("id");
-                            String interactableName = (String) inter.get("name");
-                            String interactableDescription = (String) inter.get("description");
-                            String requiredItemId = (String) inter.get("requiredItemId");
-                            String requiredFlag = (String) inter.get("requiredFlag");
-                            String setsFlag = (String) inter.get("setsFlag");
-                            String successMessage = (String) inter.get("successMessage");
-                            String failureMessage = (String) inter.get("failureMessage");
-
-                            roomInteractables.add(new Interactable(
-                                    interactableId,
-                                    interactableName,
-                                    interactableDescription,
-                                    requiredItemId,
-                                    requiredFlag,
-                                    setsFlag,
-                                    successMessage,
-                                    failureMessage
-                            ));
-                        }
-                    }
-
-
-                    List<Npc> roomNpcs = new ArrayList<>();
-                    List<Map<String, Object>> npcList = (List<Map<String, Object>>) r.get("npcs");
-
-                    if (npcList != null) {
-                        for (Map<String, Object> npcData : npcList) {
-                            String npcId = (String) npcData.get("id");
-                            String npcName = (String) npcData.get("name");
-                            String npcDescription = (String) npcData.get("description");
-
-                            List<DialogueEntry> dialogues = new ArrayList<>();
-                            List<Map<String, Object>> dialogueList =
-                                    (List<Map<String, Object>>) npcData.get("dialogues");
-
-                            if (dialogueList != null) {
-                                for (Map<String, Object> dialogueData : dialogueList) {
-                                    String requiredFlag = (String) dialogueData.get("requiredFlag");
-                                    String forbiddenFlag = (String) dialogueData.get("forbiddenFlag");
-                                    String textValue = (String) dialogueData.get("text");
-
-                                    dialogues.add(new DialogueEntry(requiredFlag, forbiddenFlag, textValue));
-                                }
-                            }
-
-                            roomNpcs.add(new Npc(npcId, npcName, npcDescription, dialogues));
-                        }
-                    }
-
-                    rooms.put(id, new Room(
-                            id,
-                            desc,
-                            exits,
-                            roomItems,
-                            roomEnemies,
-                            roomInteractables,
-                            roomNpcs
+            if (npcData.dialogues != null) {
+                for (DialogueData dialogueData : npcData.dialogues) {
+                    dialogues.add(new DialogueEntry(
+                            dialogueData.requiredFlag,
+                            dialogueData.forbiddenFlag,
+                            dialogueData.text
                     ));
                 }
             }
 
+            npcs.add(new Npc(npcData.id, npcData.name, npcData.description, dialogues));
+        }
 
-            List<ZaunPhase> zaunPhases = new ArrayList<>();
+        return npcs;
+    }
 
-            if (phaseList != null) {
-                for (Map<String, Object> p : phaseList) {
-                    int phaseNumber = ((Double) p.get("phase")).intValue();
-                    String message = (String) p.get("message");
+    private static List<ZaunPhase> buildZaunPhases(List<ZaunPhaseData> phaseList) {
+        List<ZaunPhase> zaunPhases = new ArrayList<>();
 
-                    List<EnemySpawn> spawns = new ArrayList<>();
-                    List<Map<String, Object>> phaseEnemies =
-                            (List<Map<String, Object>>) p.get("enemies");
+        if (phaseList == null) {
+            return zaunPhases;
+        }
 
-                    if (phaseEnemies != null) {
-                        for (Map<String, Object> e : phaseEnemies) {
-                            String enemyType = (String) e.get("type");
-                            int count = ((Double) e.get("count")).intValue();
+        for (ZaunPhaseData phaseData : phaseList) {
+            List<EnemySpawn> spawns = new ArrayList<>();
 
-                            spawns.add(new EnemySpawn(enemyType, count));
-                        }
-                    }
-
-                    zaunPhases.add(new ZaunPhase(phaseNumber, message, spawns));
+            if (phaseData.enemies != null) {
+                for (EnemySpawnData enemyData : phaseData.enemies) {
+                    spawns.add(new EnemySpawn(enemyData.type, enemyData.count));
                 }
             }
 
-            return new LoadedGameData(rooms, zaunPhases, introLines);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new LoadedGameData(new HashMap<>(), new ArrayList<>(), new ArrayList<>());
+            zaunPhases.add(new ZaunPhase(phaseData.phase, phaseData.message, spawns));
         }
+
+        return zaunPhases;
+    }
+
+    private static class GameFileData {
+        private List<String> intro;
+        private List<RoomData> rooms;
+        private List<ItemData> items;
+        @SerializedName("zaun_phases")
+        private List<ZaunPhaseData> zaunPhases;
+        private GameConfig gameConfig;
+    }
+
+    private static class RoomData {
+        private String id;
+        private String description;
+        private Map<String, ExitData> exits;
+        private List<String> items;
+        private List<EnemyData> enemies;
+        private List<InteractableData> interactables;
+        private List<NpcData> npcs;
+    }
+
+    private static class ExitData {
+        private String targetRoomId;
+        private Boolean locked;
+    }
+
+    private static class ItemData {
+        private String id;
+        private String name;
+        private String description;
+        @SerializedName("is_portable")
+        private Boolean isPortable;
+    }
+
+    private static class EnemyData {
+        private String id;
+        private String name;
+        private String description;
+        private String type;
+    }
+
+    private static class InteractableData {
+        private String id;
+        private String name;
+        private String description;
+        private String requiredItemId;
+        private String requiredFlag;
+        private String setsFlag;
+        private String successMessage;
+        private String failureMessage;
+    }
+
+    private static class NpcData {
+        private String id;
+        private String name;
+        private String description;
+        private List<DialogueData> dialogues;
+    }
+
+    private static class DialogueData {
+        private String requiredFlag;
+        private String forbiddenFlag;
+        private String text;
+    }
+
+    private static class ZaunPhaseData {
+        private int phase;
+        private String message;
+        private List<EnemySpawnData> enemies;
+    }
+
+    private static class EnemySpawnData {
+        private String type;
+        private int count;
     }
 }

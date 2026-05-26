@@ -1,5 +1,88 @@
 {
   "id": "intro_block",
+  "gameConfig": {
+    "title": "NECROSIS",
+    "startRoomId": "exam_room",
+    "endingFlags": [
+      "ending_survival",
+      "ending_cure",
+      "ending_evolution"
+    ],
+    "commands": [
+      {
+        "className": "engine.commands.GoCommand",
+        "aliases": ["go", "move", "run"]
+      },
+      {
+        "className": "engine.commands.InventoryCommand",
+        "aliases": ["inv", "inventory"]
+      },
+      {
+        "className": "engine.commands.TakeCommand",
+        "aliases": ["take", "grab", "hold", "pick up"]
+      },
+      {
+        "className": "engine.commands.LookCommand",
+        "aliases": ["look", "view"]
+      },
+      {
+        "className": "engine.commands.LookAtCommand",
+        "aliases": ["look at", "inspect", "examine"]
+      },
+      {
+        "className": "engine.commands.UseCommand",
+        "aliases": ["use"]
+      },
+      {
+        "className": "engine.commands.ReadCommand",
+        "aliases": ["read"]
+      },
+      {
+        "className": "engine.commands.EnterCommand",
+        "aliases": ["enter"]
+      },
+      {
+        "className": "engine.commands.TalkCommand",
+        "aliases": ["talk", "talk to"]
+      },
+      {
+        "className": "engine.commands.ChooseCommand",
+        "aliases": ["choose"]
+      },
+      {
+        "className": "engine.commands.FlashCommand",
+        "aliases": ["flash"]
+      },
+      {
+        "className": "engine.commands.StrikeCommand",
+        "aliases": ["strike"]
+      },
+      {
+        "className": "engine.commands.StabCommand",
+        "aliases": ["stab"]
+      },
+      {
+        "className": "engine.commands.CombineCommand",
+        "aliases": ["combine"]
+      },
+      {
+        "className": "engine.commands.SaveCommand",
+        "aliases": ["save"]
+      },
+      {
+        "className": "engine.commands.LoadCommand",
+        "aliases": ["load"]
+      },
+      {
+        "className": "engine.commands.HistoryCommand",
+        "aliases": ["history", "command history"]
+      },
+      {
+        "className": "engine.commands.QuitCommand",
+        "aliases": ["quit", "exit"]
+      }
+    ]
+  },
   "intro": [
     "",
     "=============================================================",
@@ -293,6 +376,12 @@
       "id": "broken_bottle",
       "name": "broken bottle",
       "description": "A thick laboratory reagent bottle, shattered cleanly at the neck.\nThe remaining glass is dense and sharp - not elegant, but the edge holds. You've used worse.\nIt won't last long and it won't reach deep on its own.\nBut the notes were specific about glass edges reinforced with metal. If you had something rigid to bind it to, you could make this into a real weapon.",
+      "is_portable": true
+    },
+    {
+      "id": "improvised_blade",
+      "name": "improvised blade",
+      "description": "A crude but deadly improvised blade made from broken glass and sharpened scrap metal.",
       "is_portable": true
     },
     {

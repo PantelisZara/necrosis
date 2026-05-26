@@ -1,0 +1,122 @@
+{
+  "id": "demo_game",
+  "gameConfig": {
+    "title": "DEMO ADVENTURE",
+    "startRoomId": "cabin",
+    "endingFlags": [
+      "demo_finished"
+    ],
+    "commands": [
+      {
+        "className": "engine.commands.GoCommand",
+        "aliases": ["go", "move"]
+      },
+      {
+        "className": "engine.commands.InventoryCommand",
+        "aliases": ["inv", "inventory"]
+      },
+      {
+        "className": "engine.commands.TakeCommand",
+        "aliases": ["take", "grab", "pick up"]
+      },
+      {
+        "className": "engine.commands.LookCommand",
+        "aliases": ["look", "view"]
+      },
+      {
+        "className": "engine.commands.LookAtCommand",
+        "aliases": ["look at", "inspect", "examine"]
+      },
+      {
+        "className": "engine.commands.UseCommand",
+        "aliases": ["use"]
+      },
+      {
+        "className": "engine.commands.ReadCommand",
+        "aliases": ["read"]
+      },
+      {
+        "className": "engine.commands.SaveCommand",
+        "aliases": ["save"]
+      },
+      {
+        "className": "engine.commands.LoadCommand",
+        "aliases": ["load"]
+      },
+      {
+        "className": "engine.commands.HistoryCommand",
+        "aliases": ["history", "command history"]
+      },
+      {
+        "className": "engine.commands.QuitCommand",
+        "aliases": ["quit", "exit"]
+      }
+    ]
+  },
+  "intro": [
+    "",
+    "DEMO ADVENTURE",
+    "This tiny game uses the same engine with a different JSON file.",
+    "Type 'look' to begin.",
+    ""
+  ],
+  "rooms": [
+    {
+      "id": "cabin",
+      "description": "A quiet cabin with a wooden table, a cold stove, and a door leading east.",
+      "exits": {
+        "east": {
+          "targetRoomId": "meadow",
+          "locked": false
+        }
+      },
+      "items": [
+        "old_note",
+        "brass_key"
+      ],
+      "enemies": [],
+      "interactables": [],
+      "npcs": []
+    },
+    {
+      "id": "meadow",
+      "description": "A small moonlit meadow. A signal bell hangs from a post beside the path.",
+      "exits": {
+        "west": {
+          "targetRoomId": "cabin",
+          "locked": false
+        }
+      },
+      "items": [],
+      "enemies": [],
+      "interactables": [
+        {
+          "id": "signal_bell",
+          "name": "signal bell",
+          "description": "A brass bell polished by years of use.",
+          "requiredItemId": null,
+          "requiredFlag": null,
+          "setsFlag": "demo_finished",
+          "successMessage": "You ring the signal bell. Somewhere beyond the meadow, a lantern answers.\nDEMO ENDING: HOMEWARD",
+          "failureMessage": "The bell is silent."
+        }
+      ],
+      "npcs": []
+    }
+  ],
+  "items": [
+    {
+      "id": "old_note",
+      "name": "old note",
+      "description": "The note reads: 'The meadow is east. Ring the bell when you are ready.'",
+      "is_portable": true
+    },
+    {
+      "id": "brass_key",
+      "name": "brass key",
+      "description": "A small brass key. This demo does not need it, but it proves another game can define its own items.",
+      "is_portable": true
+    }
+  ],
+  "zaun_phases": []
+}

@@ -48,18 +48,17 @@ public class ChooseCommand implements InterfaceCommand {
     }
 
     private void chooseKill(CurrentGameState gameState) {
+        Item keycard = gameState.createItemById("keycard");
+        if (keycard == null) {
+            System.out.println("The keycard item is missing from the game data.");
+            return;
+        }
+
         gameState.setFlag("ending_kill", true);
         gameState.setFlag("final_choice_available", false);
 
         System.out.println("You strike Dr. Zaun down before he can say another word.");
         System.out.println("He collapses silently.");
-
-        Item keycard = new Item(
-                "keycard",
-                "keycard",
-                "A high-level security keycard bearing Dr. Zaun's clearance mark.",
-                true
-        );
 
         gameState.getPlayer().addItem(keycard);
 

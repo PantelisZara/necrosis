@@ -75,4 +75,10 @@ public class Player {
         this.injured = false;
         this.turnsUntilDeath = 0;
     }
+
+    public void restoreHealthState(boolean injured, int turnsUntilDeath, boolean alive) {
+        this.injured = injured;
+        this.turnsUntilDeath = turnsUntilDeath;
+        this.alive = alive;
+    }
 }

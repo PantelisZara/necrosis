@@ -7,48 +7,57 @@ import java.util.*;
 
 public class CommandCutter {
 
-    private Map<String, InterfaceCommand> commands = new HashMap<>();
+    private final Map<String, InterfaceCommand> commands = new HashMap<>();
 
     public void registerCommand(InterfaceCommand command, String... synonyms) {
         for (String alias : synonyms) {
-            commands.put(alias.toLowerCase(), command);
+            if (alias != null && !alias.isBlank()) {
+                commands.put(alias.toLowerCase(), command);
+            }
         }
     }
 
-    public void parse_Execute(String input, CurrentGameState gameState) {
+    public boolean parse_Execute(String input, CurrentGameState gameState) {
         input = input.trim();
 
         if (input.isEmpty()) {
             System.out.println("No command entered.");
-            return;
+            return false;
         }
 
         List<String> tokens = Arrays.asList(input.split("\\s+"));
+        CommandMatch match = findLongestCommandMatch(tokens);
 
-        String commandKey;
-        List<String> args;
+        if (match == null) {
+            System.out.println("Unknown command.");
+            return false;
+        }
 
-        if (tokens.size() >= 2) {
-            String twoWordCommand = (tokens.get(0) + " " + tokens.get(1)).toLowerCase();
+        List<String> args = tokens.subList(match.wordCount, tokens.size());
+        match.command.execute(gameState, args);
+        return true;
+    }
 
-            if (commands.containsKey(twoWordCommand)) {
-                commandKey = twoWordCommand;
-                args = tokens.subList(2, tokens.size());
-                InterfaceCommand command = commands.get(commandKey);
-                command.execute(gameState, args);
-                return;
+    private CommandMatch findLongestCommandMatch(List<String> tokens) {
+        for (int wordCount = tokens.size(); wordCount >= 1; wordCount--) {
+            String alias = String.join(" ", tokens.subList(0, wordCount)).toLowerCase();
+            InterfaceCommand command = commands.get(alias);
+
+            if (command != null) {
+                return new CommandMatch(command, wordCount);
             }
         }
 
-        String oneWordCommand = tokens.get(0).toLowerCase();
-        InterfaceCommand command = commands.get(oneWordCommand);
+        return null;
+    }
 
-        if (command == null) {
-            System.out.println("Unknown command.");
-            return;
+    private static class CommandMatch {
+        private final InterfaceCommand command;
+        private final int wordCount;
+
+        private CommandMatch(InterfaceCommand command, int wordCount) {
+            this.command = command;
+            this.wordCount = wordCount;
         }
-
-        args = tokens.subList(1, tokens.size());
-        command.execute(gameState, args);
     }
 }

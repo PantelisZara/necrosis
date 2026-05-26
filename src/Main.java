@@ -1,10 +1,10 @@
-import engine.commands.*;
 import engine.core.CurrentGameState;
 import engine.loader.GameLoader;
 import engine.loader.LoadedGameData;
 import engine.model.Player;
 import engine.model.Room;
 import engine.parser.CommandCutter;
+import engine.parser.CommandRegistryLoader;
 import ui.GameWindow;
 
 import java.io.OutputStream;
@@ -29,7 +29,12 @@ public class Main {
         }));
 
 
-        LoadedGameData loadedData = GameLoader.loadGameData("resources/gameData.json");
+        String gameDataPath = args.length > 0 ? args[0] : "resources/gameData.json";
+        LoadedGameData loadedData = GameLoader.loadGameData(gameDataPath);
+
+        if (loadedData.getTitle() != null && !loadedData.getTitle().isBlank()) {
+            window.setTitle(loadedData.getTitle());
+        }
 
         for (String line : loadedData.getIntroLines()) {
             System.out.println(line);
@@ -37,33 +42,19 @@ public class Main {
 
         Map<String, Room> allRooms = loadedData.getRooms();
 
-        Room startRoom = allRooms.get("exam_room");
+        Room startRoom = allRooms.get(loadedData.getStartRoomId());
         if (startRoom == null) {
-            System.out.println("Start room could not be loaded.");
+            System.out.println("Start room could not be loaded: " + loadedData.getStartRoomId());
             return;
         }
 
         Player player = new Player(startRoom, new ArrayList<>());
-        CurrentGameState gameState = new CurrentGameState(allRooms, player);
+        CurrentGameState gameState = new CurrentGameState(allRooms, player, loadedData.getItemTemplates());
         gameState.setZaunPhases(loadedData.getZaunPhases());
 
 
         CommandCutter parser = new CommandCutter();
-
-        parser.registerCommand(new GoCommand(), "go", "move", "run");
-        parser.registerCommand(new InventoryCommand(), "inv", "inventory");
-        parser.registerCommand(new TakeCommand(), "take", "grab", "hold", "pick up");
-        parser.registerCommand(new LookCommand(), "look", "view");
-        parser.registerCommand(new LookAtCommand(), "look at", "inspect", "examine");
-        parser.registerCommand(new UseCommand(), "use");
-        parser.registerCommand(new ReadCommand(), "read");
-        parser.registerCommand(new EnterCommand(), "enter");
-        parser.registerCommand(new TalkCommand(), "talk", "talk to");
-        parser.registerCommand(new ChooseCommand(), "choose");
-        parser.registerCommand(new FlashCommand(), "flash");
-        parser.registerCommand(new StrikeCommand(), "strike");
-        parser.registerCommand(new StabCommand(), "stab");
-        parser.registerCommand(new CombineCommand(), "combine");
+        CommandRegistryLoader.registerCommands(parser, loadedData.getCommandDefinitions());
 
 
         window.setInputHandler(e -> {
@@ -77,18 +68,12 @@ public class Main {
                 return;
             }
 
-
-            if (input.equalsIgnoreCase("quit")) {
-                System.out.println("Thanks for playing!");
-                System.exit(0);
+            boolean commandExecuted = parser.parse_Execute(input, gameState);
+            if (commandExecuted) {
+                gameState.recordCommand(input);
             }
 
-            parser.parse_Execute(input, gameState);
-
-
-            if (gameState.isFlagTrue("ending_survival")
-                    || gameState.isFlagTrue("ending_cure")
-                    || gameState.isFlagTrue("ending_evolution")) {
+            if (hasReachedEnding(gameState, loadedData.getEndingFlags())) {
 
                 System.out.println();
                 System.out.println("Thanks for playing!");
@@ -98,6 +83,16 @@ public class Main {
 
         }
         );
+    }
+
+    private static boolean hasReachedEnding(CurrentGameState gameState, List<String> endingFlags) {
+        for (String endingFlag : endingFlags) {
+            if (gameState.isFlagTrue(endingFlag)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }
