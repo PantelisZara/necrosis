@@ -57,6 +57,15 @@ public class UseCommand implements InterfaceCommand, ConfigurableCommand {
             return;
         }
 
+        if (interactable.getForbiddenFlag() != null &&
+                gameState.isFlagTrue(interactable.getForbiddenFlag())) {
+            String message = interactable.getForbiddenMessage() != null
+                    ? interactable.getForbiddenMessage()
+                    : interactable.getFailureMessage();
+            System.out.println(message);
+            return;
+        }
+
         if (interactable.getRequiredFlag() != null &&
                 !gameState.isFlagTrue(interactable.getRequiredFlag())) {
             System.out.println(interactable.getFailureMessage());

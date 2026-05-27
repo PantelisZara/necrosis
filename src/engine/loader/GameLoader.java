@@ -77,11 +77,30 @@ public class GameLoader {
                     buildRoomItems(roomData.items, allItems),
                     buildEnemies(roomData.enemies),
                     buildInteractables(roomData.interactables),
-                    buildNpcs(roomData.npcs)
+                    buildNpcs(roomData.npcs),
+                    buildRoomHints(roomData.hint, roomData.hints)
             ));
         }
 
         return rooms;
+    }
+
+    private static List<String> buildRoomHints(String hint, List<String> hints) {
+        List<String> roomHints = new ArrayList<>();
+
+        if (hint != null && !hint.isBlank()) {
+            roomHints.add(hint);
+        }
+
+        if (hints != null) {
+            for (String entry : hints) {
+                if (entry != null && !entry.isBlank()) {
+                    roomHints.add(entry);
+                }
+            }
+        }
+
+        return roomHints;
     }
 
     private static Map<String, Exit> buildExits(Map<String, ExitData> exitData) {
@@ -150,9 +169,11 @@ public class GameLoader {
                     inter.description,
                     inter.requiredItemId,
                     inter.requiredFlag,
+                    inter.forbiddenFlag,
                     inter.setsFlag,
                     inter.successMessage,
-                    inter.failureMessage
+                    inter.failureMessage,
+                    inter.forbiddenMessage
             ));
         }
 
@@ -223,6 +244,8 @@ public class GameLoader {
         private List<EnemyData> enemies;
         private List<InteractableData> interactables;
         private List<NpcData> npcs;
+        private String hint;
+        private List<String> hints;
     }
 
     private static class ExitData {
@@ -251,9 +274,11 @@ public class GameLoader {
         private String description;
         private String requiredItemId;
         private String requiredFlag;
+        private String forbiddenFlag;
         private String setsFlag;
         private String successMessage;
         private String failureMessage;
+        private String forbiddenMessage;
     }
 
     private static class NpcData {

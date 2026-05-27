@@ -28,6 +28,25 @@
         "aliases": ["look at", "inspect", "examine"]
       },
       {
+        "className": "engine.commands.HelpCommand",
+        "aliases": ["help", "commands"],
+        "config": {
+          "usages": [
+            "look",
+            "look at <thing>",
+            "take <item>",
+            "read <item>",
+            "use <thing>",
+            "go <direction>",
+            "inventory",
+            "save",
+            "load",
+            "history",
+            "quit"
+          ]
+        }
+      },
+      {
         "className": "engine.commands.UseCommand",
         "aliases": ["use"]
       },
@@ -57,13 +76,14 @@
     "",
     "DEMO ADVENTURE",
     "This tiny game uses the same engine with a different JSON file.",
-    "Type 'look' to begin.",
+    "Type 'look' to inspect the room.",
+    "Type 'help' to see commands.",
     ""
   ],
   "rooms": [
     {
       "id": "cabin",
-      "description": "A quiet cabin with a wooden table, a cold stove, and a door leading east.",
+      "description": "CABIN\nA quiet cabin with a table, cold stove, old note, and brass key.\nThe only exit is east.",
       "exits": {
         "east": {
           "targetRoomId": "meadow",
@@ -76,11 +96,12 @@
       ],
       "enemies": [],
       "interactables": [],
-      "npcs": []
+      "npcs": [],
+      "hint": "The note explains the simple goal. The meadow is east."
     },
     {
       "id": "meadow",
-      "description": "A small moonlit meadow. A signal bell hangs from a post beside the path.",
+      "description": "MEADOW\nA small moonlit meadow opens beyond the cabin.\nA signal bell hangs from a post.",
       "exits": {
         "west": {
           "targetRoomId": "cabin",
@@ -93,7 +114,7 @@
         {
           "id": "signal_bell",
           "name": "signal bell",
-          "description": "A brass bell polished by years of use.",
+          "description": "A brass signal bell. Try 'use signal bell' when you are ready to end the demo.",
           "requiredItemId": null,
           "requiredFlag": null,
           "setsFlag": "demo_finished",
@@ -101,20 +122,21 @@
           "failureMessage": "The bell is silent."
         }
       ],
-      "npcs": []
+      "npcs": [],
+      "hint": "The bell is the important object here."
     }
   ],
   "items": [
     {
       "id": "old_note",
       "name": "old note",
-      "description": "The note reads: 'The meadow is east. Ring the bell when you are ready.'",
+      "description": "The note says the meadow is east. Ring the bell when you are ready.",
       "is_portable": true
     },
     {
       "id": "brass_key",
       "name": "brass key",
-      "description": "A small brass key. This demo does not need it, but it proves another game can define its own items.",
+      "description": "A small brass key. It is not needed here, but it proves this demo defines its own items.",
       "is_portable": true
     }
   ]

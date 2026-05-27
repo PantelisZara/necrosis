@@ -12,8 +12,18 @@ public class Room {
     private final List<Enemy> enemies;
     private final List<Interactable> interactables;
     private final List<Npc> npcs;
+    private final List<String> hints;
 
-    public Room(String id, String description, Map<String, Exit> exits, List<Item> items, List<Enemy> enemies, List<Interactable> interactables, List<Npc> npcs) {
+    public Room(
+            String id,
+            String description,
+            Map<String, Exit> exits,
+            List<Item> items,
+            List<Enemy> enemies,
+            List<Interactable> interactables,
+            List<Npc> npcs,
+            List<String> hints
+    ) {
         this.id = id;
         this.description = description;
         this.exits = exits;
@@ -21,6 +31,7 @@ public class Room {
         this.enemies = enemies;
         this.interactables = interactables;
         this.npcs = npcs;
+        this.hints = hints;
     }
 
     public String getId() {
@@ -64,7 +75,6 @@ public class Room {
         return false;
     }
 
-
     public Interactable findInteractableByName(String name) {
         for (Interactable interactable : interactables) {
             if (interactable.getName().equalsIgnoreCase(name)) {
@@ -72,6 +82,10 @@ public class Room {
             }
         }
         return null;
+    }
+
+    public List<Interactable> getInteractables() {
+        return interactables;
     }
 
     public List<Npc> getNpcs() {
@@ -85,5 +99,9 @@ public class Room {
             }
         }
         return null;
+    }
+
+    public List<String> getHints() {
+        return hints;
     }
 }

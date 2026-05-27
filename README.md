@@ -231,6 +231,7 @@ Necrosis defines these aliases in `resources/gameData.json`:
 - Inventory: `inv`, `inventory`
 - Take items: `take`, `grab`, `hold`, `pick up`
 - Look: `look`, `view`, `look at`, `inspect`, `examine`
+- Help: `help`, `commands`
 - Interaction: `use`, `read`, `enter`, `talk`, `talk to`, `choose`
 - Combat and crafting: `flash`, `strike`, `stab`, `combine`
 - Persistence: `save`, `load`
@@ -240,6 +241,7 @@ Example commands:
 
 ```text
 look
+help
 look at notebook
 take broken bottle
 pick up flashlight
@@ -254,6 +256,15 @@ save
 load
 history
 ```
+
+## How To Play
+
+- Start with `look` to see the room, exits, important objects, and hints.
+- Use `help` or `commands` to see available command patterns.
+- Inspect things with `look at <thing>`, including items, NPCs, enemies, and interactables.
+- Read notes and notebooks; they explain puzzles and enemy weaknesses.
+- Use `save`, `load`, and `history` while exploring.
+- Try the demo game with `resources/demoGameData.json` to see the same engine run different content.
 
 ## Gameplay Features
 
