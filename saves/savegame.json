@@ -1,42 +1,18 @@
 {
-  "currentRoomId": "generator_room",
+  "currentRoomId": "exam_room",
   "inventoryItemIds": [
+    "broken_bottle",
     "flashlight",
     "bandages",
-    "notebook",
-    "research_notes",
-    "fuel_canister",
-    "improvised_blade"
+    "notebook"
   ],
   "flags": {},
-  "zaunPhase": 0,
+  "encounterPhase": 0,
   "commandHistory": [
     "look",
     "take all",
-    "go north",
-    "look",
-    "stab infected",
-    "stab standard infected",
-    "take all",
-    "go east",
-    "look",
-    "flash clicker",
-    "take all",
-    "combine scrap metal with bottle",
-    "inv",
-    "look at broken bottle",
-    "combine scrap metal with bottle",
-    "combine scrap with bottle",
-    "combine bottle with scrap metal",
-    "inv",
-    "combine broken bottle with scrap metal",
-    "go east",
-    "look",
-    "go west",
-    "go west",
-    "look",
-    "stab ripper",
-    "strike ripper"
+    "talk emily",
+    "history"
   ],
   "roomItemIds": {
     "exit_room": [],
@@ -44,7 +20,11 @@
     "boss_room": [],
     "lobby": [],
     "generator_room": [],
-    "research_room": []
+    "research_room": [
+      "research_notes",
+      "fuel_canister",
+      "scrap_metal"
+    ]
   },
   "roomEnemies": {
     "exit_room": [],
@@ -56,7 +36,7 @@
         "name": "standard infected",
         "description": "What used to be a security guard moves through the lobby with a lurching, broken rhythm.\nOne leg drags uselessly. Its mouth opens and closes around the same syllables, over and over - the remnants of a sentence it no longer understands.\nThis is early-stage NV-1: the higher brain functions are gone, but the body hasn\u0027t caught up yet.\nIt is slow. It is weak. And it will not stop until you do.",
         "type": "STANDARD_INFECTED",
-        "defeated": true
+        "defeated": false
       }
     ],
     "generator_room": [
@@ -74,7 +54,7 @@
         "name": "clicker",
         "description": "A former researcher, now unrecognizable.\nAdvanced NV-1 infection causes catastrophic neural pressure buildup - eventually the optic nerves fail completely and the eyes fuse shut. What survives develops something else instead: an acute sensitivity to sound and light that borders on sonar.\nThe soft clicking sound it makes is how it maps the room.\nMove quietly.\nOr don\u0027t move at all.",
         "type": "CLICKER",
-        "defeated": true
+        "defeated": false
       }
     ]
   },

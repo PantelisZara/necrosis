@@ -1,5 +1,7 @@
 package engine.loader;
 
+import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +9,7 @@ public class CommandDefinition {
 
     private String className;
     private List<String> aliases;
+    private JsonObject config;
 
     public CommandDefinition() {
         this("", new ArrayList<>());
@@ -27,5 +30,9 @@ public class CommandDefinition {
         }
 
         return aliases;
+    }
+
+    public JsonObject getConfig() {
+        return config;
     }
 }

@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import engine.core.CurrentGameState;
 import engine.model.Enemy;
-import engine.model.EnemyType;
 import engine.model.Exit;
 import engine.model.Item;
 import engine.model.Room;
@@ -58,7 +57,7 @@ public class SaveManager {
 
         saveData.setInventoryItemIds(getInventoryItemIds(gameState));
         saveData.setFlags(new HashMap<>(gameState.getFlags()));
-        saveData.setZaunPhase(gameState.getZaunPhase());
+        saveData.setEncounterPhase(gameState.getEncounterPhase());
         saveData.setCommandHistory(gameState.getCommandHistory());
         saveData.setRoomItemIds(getRoomItemIds(gameState));
         saveData.setRoomEnemies(getRoomEnemies(gameState));
@@ -107,7 +106,7 @@ public class SaveManager {
                         enemy.getId(),
                         enemy.getName(),
                         enemy.getDescription(),
-                        enemy.getType().name(),
+                        enemy.getType(),
                         enemy.isDefeated()
                 ));
             }
@@ -147,7 +146,7 @@ public class SaveManager {
             gameState.getFlags().putAll(saveData.getFlags());
         }
 
-        gameState.setZaunPhase(saveData.getZaunPhase());
+        gameState.setEncounterPhase(saveData.getEncounterPhase());
         gameState.restoreCommandHistory(saveData.getCommandHistory());
         gameState.getPlayer().restoreHealthState(
                 saveData.isPlayerInjured(),
@@ -222,7 +221,7 @@ public class SaveManager {
                         savedEnemy.getId(),
                         savedEnemy.getName(),
                         savedEnemy.getDescription(),
-                        EnemyType.valueOf(savedEnemy.getType())
+                        savedEnemy.getType()
                 );
 
                 if (savedEnemy.isDefeated()) {

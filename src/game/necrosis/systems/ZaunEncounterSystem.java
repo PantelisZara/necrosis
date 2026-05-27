@@ -1,7 +1,10 @@
-package engine.systems;
+package game.necrosis.systems;
 
 import engine.core.CurrentGameState;
-import engine.model.*;
+import engine.model.EncounterPhase;
+import engine.model.Enemy;
+import engine.model.EnemySpawn;
+import engine.model.Room;
 
 public class ZaunEncounterSystem {
 
@@ -11,7 +14,7 @@ public class ZaunEncounterSystem {
         }
 
         gameState.setFlag("zaun_encounter_started", true);
-        gameState.setZaunPhase(1);
+        gameState.setEncounterPhase(1);
 
         spawnPhase(gameState, 1);
     }
@@ -30,16 +33,16 @@ public class ZaunEncounterSystem {
             return;
         }
 
-        int currentPhase = gameState.getZaunPhase();
+        int currentPhase = gameState.getEncounterPhase();
 
         if (currentPhase == 1) {
-            gameState.setZaunPhase(2);
+            gameState.setEncounterPhase(2);
             spawnPhase(gameState, 2);
             return;
         }
 
         if (currentPhase == 2) {
-            gameState.setZaunPhase(3);
+            gameState.setEncounterPhase(3);
             spawnPhase(gameState, 3);
             return;
         }
@@ -61,7 +64,7 @@ public class ZaunEncounterSystem {
             return;
         }
 
-        ZaunPhase phase = gameState.getZaunPhases()
+        EncounterPhase phase = gameState.getEncounterPhases()
                 .stream()
                 .filter(p -> p.getPhase() == phaseNumber)
                 .findFirst()
@@ -75,8 +78,6 @@ public class ZaunEncounterSystem {
         System.out.println(phase.getMessage());
 
         for (EnemySpawn spawn : phase.getEnemies()) {
-            EnemyType enemyType = EnemyType.valueOf(spawn.getType().toUpperCase());
-
             for (int i = 1; i <= spawn.getCount(); i++) {
                 String generatedId = "zaun_phase" + phaseNumber + "_" + spawn.getType().toLowerCase() + "_" + i;
                 String generatedName = spawn.getType().toLowerCase().replace("_", " ");
@@ -86,7 +87,7 @@ public class ZaunEncounterSystem {
                         generatedId,
                         generatedName,
                         generatedDescription,
-                        enemyType
+                        spawn.getType()
                 ));
             }
         }

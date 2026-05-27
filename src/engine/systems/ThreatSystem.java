@@ -29,7 +29,7 @@ public class ThreatSystem {
         }
 
         System.out.println("You try to " + actionName + ", but an enemy strikes before you can finish.");
-        System.out.println("You are badly injured. Use bandages immediately or you will die.");
+        System.out.println("You are badly injured. Use a healing item immediately or you will die.");
         gameState.getPlayer().injure();
         return true;
     }

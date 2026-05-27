@@ -1,10 +1,10 @@
-package engine.commands;
+package game.necrosis.commands;
 
+import engine.commands.InterfaceCommand;
 import engine.core.CurrentGameState;
 import engine.model.Enemy;
-import engine.model.EnemyType;
 import engine.model.Room;
-import engine.systems.ZaunEncounterSystem;
+import game.necrosis.systems.ZaunEncounterSystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +27,12 @@ public class StabCommand implements InterfaceCommand {
             return;
         }
 
-        if (targetEnemy.getType() == EnemyType.STANDARD_INFECTED) {
+        if ("STANDARD_INFECTED".equalsIgnoreCase(targetEnemy.getType())) {
             handleStandardInfected(gameState, targetEnemy);
             return;
         }
 
-        if (targetEnemy.getType() == EnemyType.BRUTE) {
+        if ("BRUTE".equalsIgnoreCase(targetEnemy.getType())) {
             handleBrute(gameState, targetEnemy);
             return;
         }

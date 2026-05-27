@@ -50,7 +50,7 @@ public class Main {
 
         Player player = new Player(startRoom, new ArrayList<>());
         CurrentGameState gameState = new CurrentGameState(allRooms, player, loadedData.getItemTemplates());
-        gameState.setZaunPhases(loadedData.getZaunPhases());
+        gameState.setEncounterPhases(loadedData.getEncounterPhases());
 
 
         CommandCutter parser = new CommandCutter();

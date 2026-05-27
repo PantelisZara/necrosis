@@ -1,8 +1,8 @@
 package engine.loader;
 
+import engine.model.EncounterPhase;
 import engine.model.Item;
 import engine.model.Room;
-import engine.model.ZaunPhase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,20 +12,20 @@ import java.util.Map;
 public class LoadedGameData {
 
     private final Map<String, Room> rooms;
-    private final List<ZaunPhase> zaunPhases;
+    private final List<EncounterPhase> encounterPhases;
     private final List<String> introLines;
     private final GameConfig gameConfig;
     private final Map<String, Item> itemTemplates;
 
     public LoadedGameData(
             Map<String, Room> rooms,
-            List<ZaunPhase> zaunPhases,
+            List<EncounterPhase> encounterPhases,
             List<String> introLines,
             GameConfig gameConfig,
             Map<String, Item> itemTemplates
     ) {
         this.rooms = rooms;
-        this.zaunPhases = zaunPhases;
+        this.encounterPhases = encounterPhases;
         this.introLines = introLines;
         this.gameConfig = gameConfig;
         this.itemTemplates = itemTemplates;
@@ -45,8 +45,8 @@ public class LoadedGameData {
         return rooms;
     }
 
-    public List<ZaunPhase> getZaunPhases() {
-        return zaunPhases;
+    public List<EncounterPhase> getEncounterPhases() {
+        return encounterPhases;
     }
 
     public List<String> getIntroLines() {

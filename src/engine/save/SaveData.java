@@ -10,7 +10,7 @@ public class SaveData {
     private String currentRoomId;
     private List<String> inventoryItemIds;
     private Map<String, Boolean> flags;
-    private int zaunPhase;
+    private int encounterPhase;
     private List<String> commandHistory;
     private Map<String, List<String>> roomItemIds;
     private Map<String, List<SavedEnemy>> roomEnemies;
@@ -53,12 +53,12 @@ public class SaveData {
         this.flags = flags;
     }
 
-    public int getZaunPhase() {
-        return zaunPhase;
+    public int getEncounterPhase() {
+        return encounterPhase;
     }
 
-    public void setZaunPhase(int zaunPhase) {
-        this.zaunPhase = zaunPhase;
+    public void setEncounterPhase(int encounterPhase) {
+        this.encounterPhase = encounterPhase;
     }
 
     public List<String> getCommandHistory() {

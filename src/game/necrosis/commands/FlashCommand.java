@@ -1,10 +1,10 @@
-package engine.commands;
+package game.necrosis.commands;
 
+import engine.commands.InterfaceCommand;
 import engine.core.CurrentGameState;
 import engine.model.Enemy;
-import engine.model.EnemyType;
 import engine.model.Room;
-import engine.systems.ZaunEncounterSystem;
+import game.necrosis.systems.ZaunEncounterSystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class FlashCommand implements InterfaceCommand {
             return;
         }
 
-        if (targetEnemy.getType() != EnemyType.CLICKER) {
+        if (!"CLICKER".equalsIgnoreCase(targetEnemy.getType())) {
             System.out.println("Flashing that won't help.");
             return;
         }

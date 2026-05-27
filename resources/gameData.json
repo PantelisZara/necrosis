@@ -31,7 +31,21 @@
       },
       {
         "className": "engine.commands.UseCommand",
-        "aliases": ["use"]
+        "aliases": ["use"],
+        "config": {
+          "healingItems": [
+            {
+              "itemId": "bandages",
+              "aliases": ["bandage", "bandages"],
+              "notNeededMessage": "You don't need bandages right now.",
+              "missingItemMessage": "You don't have any bandages.",
+              "successMessages": [
+                "You quickly wrap your wounds with the bandages.",
+                "You are no longer bleeding."
+              ]
+            }
+          ]
+        }
       },
       {
         "className": "engine.commands.ReadCommand",
@@ -39,31 +53,123 @@
       },
       {
         "className": "engine.commands.EnterCommand",
-        "aliases": ["enter"]
+        "aliases": ["enter"],
+        "config": {
+          "requiredFlag": "terminal_prompt_active",
+          "code": "7314",
+          "inactiveMessage": "There is nothing to enter a code into.",
+          "missingInputMessage": "Enter what code?",
+          "deniedMessage": "ACCESS DENIED.",
+          "successMessages": [
+            "ACCESS GRANTED.",
+            "Security door unlocking..."
+          ],
+          "setFlags": {
+            "terminal_unlocked": true,
+            "terminal_prompt_active": false
+          },
+          "unlockExits": [
+            {
+              "roomId": "lobby",
+              "direction": "north"
+            }
+          ]
+        }
       },
       {
-        "className": "engine.commands.TalkCommand",
+        "className": "game.necrosis.commands.NecrosisTalkCommand",
         "aliases": ["talk", "talk to"]
       },
       {
         "className": "engine.commands.ChooseCommand",
-        "aliases": ["choose"]
+        "aliases": ["choose"],
+        "config": {
+          "availableFlag": "final_choice_available",
+          "requiredRoomId": "boss_room",
+          "missingChoiceMessage": "Choose what?",
+          "unavailableMessage": "There is no major decision to make right now.",
+          "wrongRoomMessage": "This choice can only be made in front of Dr. Zaun.",
+          "invalidChoiceMessage": "Available choices: kill, spare, join",
+          "choices": [
+            {
+              "value": "kill",
+              "addItemIds": ["keycard"],
+              "missingItemMessage": "The keycard item is missing from the game data.",
+              "setFlags": {
+                "ending_kill": true,
+                "final_choice_available": false
+              },
+              "unlockExits": [
+                {
+                  "roomId": "boss_room",
+                  "direction": "north"
+                }
+              ],
+              "messages": [
+                "You strike Dr. Zaun down before he can say another word.",
+                "He collapses silently.",
+                "You pick up Zaun's keycard.",
+                "The way to the escape route is now open."
+              ]
+            },
+            {
+              "value": "spare",
+              "setFlags": {
+                "ending_cure": true,
+                "final_choice_available": false
+              },
+              "messages": [
+                "You lower your weapon and demand the full formula.",
+                "Zaun smiles faintly and reveals the Catalyst data.",
+                "With Emily's help, you begin working toward a cure.",
+                "ENDING: THE CURE"
+              ]
+            },
+            {
+              "value": "join",
+              "setFlags": {
+                "ending_evolution": true,
+                "final_choice_available": false
+              },
+              "messages": [
+                "You step toward Zaun instead of away from him.",
+                "He nods, as if he expected this all along.",
+                "The facility is yours now. The Fallen will follow.",
+                "ENDING: EVOLUTION"
+              ]
+            }
+          ]
+        }
       },
       {
-        "className": "engine.commands.FlashCommand",
+        "className": "game.necrosis.commands.FlashCommand",
         "aliases": ["flash"]
       },
       {
-        "className": "engine.commands.StrikeCommand",
+        "className": "game.necrosis.commands.StrikeCommand",
         "aliases": ["strike"]
       },
       {
-        "className": "engine.commands.StabCommand",
+        "className": "game.necrosis.commands.StabCommand",
         "aliases": ["stab"]
       },
       {
         "className": "engine.commands.CombineCommand",
-        "aliases": ["combine"]
+        "aliases": ["combine"],
+        "config": {
+          "recipes": [
+            {
+              "ingredientIds": ["broken_bottle", "scrap_metal"],
+              "resultItemId": "improvised_blade",
+              "missingIngredientsMessage": "You do not have the required items.",
+              "missingResultMessage": "The improvised blade item is missing from the game data.",
+              "successMessages": [
+                "You combine the broken bottle with the scrap metal.",
+                "You created: improvised blade."
+              ]
+            }
+          ]
+        }
       },
       {
         "className": "engine.commands.SaveCommand",
@@ -391,7 +497,7 @@
       "is_portable": true
     }
   ],
-  "zaun_phases": [
+  "encounterPhases": [
     {
       "phase": 1,
       "message": "Zaun moves to the first containment column and enters a code without looking at the keypad.\nHe has done this before.\nThe chamber seals disengage with a pressurized hiss and three figures stumble forward - slow, broken, still wearing what they arrived in. Stage 1. Early infection.\nHe watches them the way you'd watch a timer run down.",

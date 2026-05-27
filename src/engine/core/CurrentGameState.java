@@ -1,9 +1,9 @@
 package engine.core;
 
+import engine.model.EncounterPhase;
 import engine.model.Item;
 import engine.model.Player;
 import engine.model.Room;
-import engine.model.ZaunPhase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,8 +17,8 @@ public class CurrentGameState {
     private final Map<String, Boolean> flags;
     private final Map<String, Item> itemTemplates;
     private final CommandHistory commandHistory;
-    private int zaunPhase;
-    private List<ZaunPhase> zaunPhases;
+    private int encounterPhase;
+    private List<EncounterPhase> encounterPhases;
 
     public CurrentGameState(Map<String, Room> rooms, Player player) {
         this(rooms, player, new HashMap<>());
@@ -30,8 +30,8 @@ public class CurrentGameState {
         this.flags = new HashMap<>();
         this.itemTemplates = itemTemplates != null ? itemTemplates : new HashMap<>();
         this.commandHistory = new CommandHistory();
-        this.zaunPhase = 0;
-        this.zaunPhases = new ArrayList<>();
+        this.encounterPhase = 0;
+        this.encounterPhases = new ArrayList<>();
     }
 
     public Map<String, Room> getRooms() {
@@ -42,24 +42,24 @@ public class CurrentGameState {
         return player;
     }
 
-    public int getZaunPhase() {
-        return zaunPhase;
+    public int getEncounterPhase() {
+        return encounterPhase;
     }
 
-    public void setZaunPhase(int zaunPhase) {
-        this.zaunPhase = zaunPhase;
+    public void setEncounterPhase(int encounterPhase) {
+        this.encounterPhase = encounterPhase;
     }
 
     public Room getRoom(String id) {
         return rooms.get(id);
     }
 
-    public List<ZaunPhase> getZaunPhases() {
-        return zaunPhases;
+    public List<EncounterPhase> getEncounterPhases() {
+        return encounterPhases;
     }
 
-    public void setZaunPhases(List<ZaunPhase> zaunPhases) {
-        this.zaunPhases = zaunPhases;
+    public void setEncounterPhases(List<EncounterPhase> encounterPhases) {
+        this.encounterPhases = encounterPhases != null ? encounterPhases : new ArrayList<>();
     }
 
     public void setFlag(String flagName, boolean value) {

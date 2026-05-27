@@ -1,5 +1,6 @@
 package engine.parser;
 
+import engine.commands.ConfigurableCommand;
 import engine.commands.InterfaceCommand;
 import engine.loader.CommandDefinition;
 
@@ -36,6 +37,10 @@ public class CommandRegistryLoader {
             if (!(instance instanceof InterfaceCommand)) {
                 System.out.println("Command class does not implement InterfaceCommand: " + definition.getClassName());
                 return;
+            }
+
+            if (instance instanceof ConfigurableCommand configurableCommand) {
+                configurableCommand.configure(definition.getConfig());
             }
 
             parser.registerCommand(

@@ -4,7 +4,6 @@ import engine.core.CurrentGameState;
 import engine.model.DialogueEntry;
 import engine.model.Npc;
 import engine.model.Room;
-import engine.systems.ZaunEncounterSystem;
 
 import java.util.List;
 
@@ -43,12 +42,10 @@ public class TalkCommand implements InterfaceCommand {
             System.out.println(npc.getName() + " has nothing to say right now.");
         }
 
-        if (npc.getId().equalsIgnoreCase("zaun") &&
-                !gameState.isFlagTrue("zaun_encounter_started")) {
-            System.out.println();
-            System.out.println("The chamber trembles as containment locks disengage.");
-            ZaunEncounterSystem.startEncounter(gameState);
-        }
+        afterTalk(gameState, npc);
+    }
+
+    protected void afterTalk(CurrentGameState gameState, Npc npc) {
     }
 
     private DialogueEntry findMatchingDialogue(CurrentGameState gameState, Npc npc) {

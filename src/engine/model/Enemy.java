@@ -5,10 +5,10 @@ public class Enemy {
     private final String id;
     private final String name;
     private final String description;
-    private final EnemyType type;
+    private final String type;
     private boolean defeated;
 
-    public Enemy(String id, String name, String description, EnemyType type) {
+    public Enemy(String id, String name, String description, String type) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -28,7 +28,7 @@ public class Enemy {
         return description;
     }
 
-    public EnemyType getType() {
+    public String getType() {
         return type;
     }
 

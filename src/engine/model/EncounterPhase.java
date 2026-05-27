@@ -2,13 +2,13 @@ package engine.model;
 
 import java.util.List;
 
-public class ZaunPhase {
+public class EncounterPhase {
 
     private final int phase;
     private final String message;
     private final List<EnemySpawn> enemies;
 
-    public ZaunPhase(int phase, String message, List<EnemySpawn> enemies) {
+    public EncounterPhase(int phase, String message, List<EnemySpawn> enemies) {
         this.phase = phase;
         this.message = message;
         this.enemies = enemies;

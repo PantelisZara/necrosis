@@ -117,6 +117,5 @@
       "description": "A small brass key. This demo does not need it, but it proves another game can define its own items.",
       "is_portable": true
     }
-  ],
-  "zaun_phases": []
+  ]
 }

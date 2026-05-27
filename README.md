@@ -12,6 +12,7 @@ This project follows that goal by separating:
 
 - **Engine logic**: Java classes for loading, parsing, command execution, models, state, saving, and UI.
 - **Game content**: JSON files that define rooms, items, NPCs, enemies, interactables, intro text, start room, ending flags, and command aliases.
+- **Game extensions**: Necrosis-only command and encounter behavior lives in `game.necrosis`, outside the reusable `engine` package.
 
 ## Overview
 
@@ -34,12 +35,12 @@ The teacher's PDF description defines the core goal as a reusable text-based adv
 | Assignment requirement | Project implementation |
 | --- | --- |
 | Reusable engine, not only one game | The engine can load `resources/gameData.json` or `resources/demoGameData.json` without changing Java code. |
-| Game content must not be hardcoded in Java | Rooms, items, exits, enemies, NPCs, dialogues, interactables, intro text, start room, ending flags, and command aliases are defined in JSON. |
+| Game content must not be hardcoded in Java | Rooms, items, exits, enemies, NPCs, dialogues, interactables, intro text, start room, ending flags, command aliases, recipes, code puzzles, and configured choices are defined in JSON. |
 | External game definition | `GameLoader` loads game data from JSON and builds the runtime world dynamically. |
 | Rooms / scenes | Implemented by `Room`, loaded from JSON with descriptions, exits, items, enemies, interactables, and NPCs. |
 | Items | Implemented by `Item`, with inventory support and JSON definitions. |
 | Player | Implemented by `Player`, with current room, inventory, injury state, and alive/dead state. |
-| Game state management | `CurrentGameState` stores rooms, player, flags, Zaun phases, item templates, and command history. |
+| Game state management | `CurrentGameState` stores rooms, player, flags, encounter phases, item templates, and command history. |
 | Extensible command system | Every command implements `InterfaceCommand`. Commands are separate classes and registered dynamically. |
 | Synonyms / aliases | Aliases such as `take`, `grab`, `pick up`, `look at`, and `talk to` are loaded from JSON. |
 | Commands with multiple objects | Commands such as `combine broken bottle with scrap metal` pass all remaining words as arguments to command classes. |
@@ -48,7 +49,7 @@ The teacher's PDF description defines the core goal as a reusable text-based adv
 | Open/Closed Principle | New commands can be added as new `InterfaceCommand` classes and JSON entries without editing `Main` or the parser registration logic. |
 | Second game demo | `resources/demoGameData.json` is a separate small game that runs on the same engine. |
 | NPC bonus feature | NPCs exist through `Npc` and `DialogueEntry`, with flag-based dialogue staging. |
-| Change scenario support | `CombineCommand`, save/load/history, and JSON command registration demonstrate that features can be added without rewriting the engine. |
+| Change scenario support | Configurable commands, save/load/history, JSON command registration, and game-specific extension packages demonstrate that features can be added without rewriting the engine. |
 
 ## Architecture
 
@@ -66,7 +67,7 @@ The project follows a modular architecture with clear separation of responsibili
 - `Interactable`
 - `Exit`
 - `DialogueEntry`
-- `ZaunPhase`
+- `EncounterPhase`
 
 ### Loader Layer
 
@@ -81,7 +82,7 @@ Loaded data includes:
 - enemies
 - NPCs and dialogues
 - interactables and puzzles
-- boss encounter phases
+- encounter phases
 - game configuration
 - command definitions
 
@@ -99,7 +100,7 @@ Important loader classes:
 - player state
 - global flags
 - progression state
-- boss phases
+- encounter phases
 - item templates for restored saves
 - command history
 
@@ -117,11 +118,15 @@ Examples:
 - Movement: `GoCommand`
 - Inventory: `InventoryCommand`
 - Interaction: `TakeCommand`, `UseCommand`, `ReadCommand`
-- Combat: `StabCommand`, `FlashCommand`, `StrikeCommand`
+- Data-driven puzzles: `CombineCommand`, `EnterCommand`, `ChooseCommand`
 - Dialogue: `TalkCommand`
-- Decisions: `ChooseCommand`
 - Persistence: `SaveCommand`, `LoadCommand`
 - Utility: `HistoryCommand`, `QuitCommand`
+
+Necrosis-specific commands such as `game.necrosis.commands.StabCommand`,
+`game.necrosis.commands.FlashCommand`, `game.necrosis.commands.StrikeCommand`,
+and `game.necrosis.commands.NecrosisTalkCommand` extend the game without placing
+Necrosis room IDs, item IDs, enemy rules, or boss behavior in `engine.commands`.
 
 ### Command Parser
 
@@ -201,7 +206,22 @@ Each game can define a `gameConfig` section:
 }
 ```
 
-This means `Main.java` does not manually register commands and does not hardcode the starting room.
+Command entries can also include a `config` object. Generic commands use that
+configuration for recipes, access codes, exit unlocks, healing items, and
+choice outcomes. This means `Main.java` does not manually register commands and
+does not hardcode the starting room or command-specific puzzle data.
+
+## Engine And Game Extensions
+
+The reusable engine lives under `src/engine`. It contains generic models,
+loading, parsing, state, save/load, UI support, and reusable commands.
+
+Necrosis-specific behavior lives under `src/game/necrosis`:
+
+- `game.necrosis.commands` contains the Necrosis combat commands and talk hook.
+- `game.necrosis.systems` contains the Zaun encounter progression system.
+- `resources/gameData.json` selects those extension classes only for Necrosis.
+- `resources/demoGameData.json` uses only reusable `engine.commands` classes.
 
 ## Available Commands
 
@@ -257,7 +277,8 @@ history
 
 ### Combat System
 
-Different enemy types require different strategies:
+Necrosis adds game-specific combat commands outside the core engine. Different
+enemy types require different strategies:
 
 - Standard infected: use `stab`
 - Clicker: use `flash` with the flashlight
@@ -266,7 +287,8 @@ Different enemy types require different strategies:
 
 ### Crafting System
 
-The player can combine items:
+The generic `CombineCommand` reads recipes from JSON. In Necrosis, the player
+can combine items:
 
 ```text
 combine broken bottle with scrap metal
@@ -292,8 +314,8 @@ improvised blade
 ### Boss Encounter
 
 - Multi-phase encounter system
-- Enemy waves loaded from JSON through `zaun_phases`
-- Encounter progression controlled by game state
+- Enemy waves loaded from JSON through `encounterPhases`
+- Necrosis encounter progression controlled by `game.necrosis.systems.ZaunEncounterSystem`
 
 ### Multiple Endings
 
@@ -316,7 +338,7 @@ The save file stores:
 - current room ID
 - inventory item IDs
 - flags
-- Zaun phase
+- encounter phase
 - command history
 - room item state
 - enemy state

@@ -5,13 +5,12 @@ import com.google.gson.annotations.SerializedName;
 import engine.model.DialogueEntry;
 import engine.model.Enemy;
 import engine.model.EnemySpawn;
-import engine.model.EnemyType;
+import engine.model.EncounterPhase;
 import engine.model.Exit;
 import engine.model.Interactable;
 import engine.model.Item;
 import engine.model.Npc;
 import engine.model.Room;
-import engine.model.ZaunPhase;
 
 import java.io.FileReader;
 import java.io.Reader;
@@ -34,10 +33,10 @@ public class GameLoader {
             List<String> introLines = data.intro != null ? data.intro : new ArrayList<>();
             Map<String, Item> allItems = buildItemTemplates(data.items);
             Map<String, Room> rooms = buildRooms(data.rooms, allItems);
-            List<ZaunPhase> zaunPhases = buildZaunPhases(data.zaunPhases);
+            List<EncounterPhase> encounterPhases = buildEncounterPhases(data.encounterPhases);
             GameConfig gameConfig = data.gameConfig != null ? data.gameConfig : new GameConfig();
 
-            return new LoadedGameData(rooms, zaunPhases, introLines, gameConfig, allItems);
+            return new LoadedGameData(rooms, encounterPhases, introLines, gameConfig, allItems);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -130,7 +129,7 @@ public class GameLoader {
                     enemyData.id,
                     enemyData.name,
                     enemyData.description,
-                    EnemyType.valueOf(enemyData.type.toUpperCase())
+                    enemyData.type
             ));
         }
 
@@ -186,14 +185,14 @@ public class GameLoader {
         return npcs;
     }
 
-    private static List<ZaunPhase> buildZaunPhases(List<ZaunPhaseData> phaseList) {
-        List<ZaunPhase> zaunPhases = new ArrayList<>();
+    private static List<EncounterPhase> buildEncounterPhases(List<EncounterPhaseData> phaseList) {
+        List<EncounterPhase> encounterPhases = new ArrayList<>();
 
         if (phaseList == null) {
-            return zaunPhases;
+            return encounterPhases;
         }
 
-        for (ZaunPhaseData phaseData : phaseList) {
+        for (EncounterPhaseData phaseData : phaseList) {
             List<EnemySpawn> spawns = new ArrayList<>();
 
             if (phaseData.enemies != null) {
@@ -202,18 +201,17 @@ public class GameLoader {
                 }
             }
 
-            zaunPhases.add(new ZaunPhase(phaseData.phase, phaseData.message, spawns));
+            encounterPhases.add(new EncounterPhase(phaseData.phase, phaseData.message, spawns));
         }
 
-        return zaunPhases;
+        return encounterPhases;
     }
 
     private static class GameFileData {
         private List<String> intro;
         private List<RoomData> rooms;
         private List<ItemData> items;
-        @SerializedName("zaun_phases")
-        private List<ZaunPhaseData> zaunPhases;
+        private List<EncounterPhaseData> encounterPhases;
         private GameConfig gameConfig;
     }
 
@@ -271,7 +269,7 @@ public class GameLoader {
         private String text;
     }
 
-    private static class ZaunPhaseData {
+    private static class EncounterPhaseData {
         private int phase;
         private String message;
         private List<EnemySpawnData> enemies;
