@@ -1,10 +1,21 @@
 package ui;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Insets;
 import java.awt.event.ActionListener;
 
 public class GameWindow extends JFrame {
+
+    private static final long serialVersionUID = 1L;
 
     private final JTextArea outputArea;
     private final JTextField inputField;
