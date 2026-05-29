@@ -4,8 +4,6 @@ import engine.model.EncounterPhase;
 import engine.model.Item;
 import engine.model.Room;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,16 +29,6 @@ public class LoadedGameData {
         this.itemTemplates = itemTemplates;
     }
 
-    public static LoadedGameData empty() {
-        return new LoadedGameData(
-                new HashMap<>(),
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new GameConfig(),
-                new HashMap<>()
-        );
-    }
-
     public Map<String, Room> getRooms() {
         return rooms;
     }
@@ -51,10 +39,6 @@ public class LoadedGameData {
 
     public List<String> getIntroLines() {
         return introLines;
-    }
-
-    public GameConfig getGameConfig() {
-        return gameConfig;
     }
 
     public String getTitle() {

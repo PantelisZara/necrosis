@@ -17,7 +17,7 @@ public class ThreatSystem {
 
         if (gameState.getPlayer().isInjured()) {
             System.out.println("You try to " + actionName + ", but the enemies keep closing in.");
-            System.out.println("You are already badly wounded and losing blood.");
+            System.out.println("You are already badly wounded.");
             gameState.getPlayer().decrementDeathCounter();
 
             if (!gameState.getPlayer().isAlive()) {

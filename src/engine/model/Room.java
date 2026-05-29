@@ -77,7 +77,7 @@ public class Room {
 
     public Interactable findInteractableByName(String name) {
         for (Interactable interactable : interactables) {
-            if (interactable.getName().equalsIgnoreCase(name)) {
+            if (matches(name, interactable.getId()) || matches(name, interactable.getName())) {
                 return interactable;
             }
         }
@@ -94,7 +94,7 @@ public class Room {
 
     public Npc findNpcByName(String name) {
         for (Npc npc : npcs) {
-            if (npc.getName().equalsIgnoreCase(name)) {
+            if (matches(name, npc.getId()) || matches(name, npc.getName())) {
                 return npc;
             }
         }
@@ -103,5 +103,15 @@ public class Room {
 
     public List<String> getHints() {
         return hints;
+    }
+
+    private boolean matches(String input, String value) {
+        if (input == null || value == null) {
+            return false;
+        }
+
+        String normalizedInput = input.toLowerCase().trim();
+        String normalizedValue = value.toLowerCase().replace("_", " ").trim();
+        return normalizedInput.equals(normalizedValue);
     }
 }

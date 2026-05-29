@@ -6,7 +6,7 @@ import engine.save.SaveManager;
 import java.io.IOException;
 import java.util.List;
 
-public class SaveCommand implements InterfaceCommand {
+public class SaveCommand implements InterfaceCommand, NonReplayableCommand {
 
     @Override
     public void execute(CurrentGameState gameState, List<String> args) {

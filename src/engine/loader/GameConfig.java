@@ -11,14 +11,8 @@ public class GameConfig {
     private List<CommandDefinition> commands;
 
     public GameConfig() {
-        this("", "", new ArrayList<>(), new ArrayList<>());
-    }
-
-    public GameConfig(String title, String startRoomId, List<String> endingFlags, List<CommandDefinition> commands) {
-        this.title = title;
-        this.startRoomId = startRoomId;
-        this.endingFlags = endingFlags != null ? endingFlags : new ArrayList<>();
-        this.commands = commands != null ? commands : new ArrayList<>();
+        this.endingFlags = new ArrayList<>();
+        this.commands = new ArrayList<>();
     }
 
     public String getTitle() {

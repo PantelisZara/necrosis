@@ -61,7 +61,7 @@ public class StabCommand implements InterfaceCommand {
         }
 
         enemy.defeat();
-        System.out.println("You lunge forward with the improvised blade and strike the brute at the throat.");
+        System.out.println("You lunge forward with the improvised blade and stab the brute at the throat.");
         System.out.println("The creature staggers, collapses, and finally goes still.");
         ZaunEncounterSystem.advanceIfNeeded(gameState);
     }

@@ -13,12 +13,12 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class SaveManager {
+
+    public static final int CURRENT_SAVE_FORMAT_VERSION = 2;
 
     private static final Path SAVE_DIRECTORY = Path.of("saves");
     private static final Path SAVE_FILE = SAVE_DIRECTORY.resolve("savegame.json");
@@ -40,102 +40,28 @@ public class SaveManager {
         }
     }
 
-    public static void load(CurrentGameState gameState) throws IOException {
+    public static SaveData loadSaveData() throws IOException {
         try (Reader reader = Files.newBufferedReader(SAVE_FILE)) {
-            SaveData saveData = GSON.fromJson(reader, SaveData.class);
-            restore(gameState, saveData);
+            return GSON.fromJson(reader, SaveData.class);
         }
     }
 
     private static SaveData toSaveData(CurrentGameState gameState) {
         SaveData saveData = new SaveData();
-
-        Room currentRoom = gameState.getPlayer().getCurrentRoom();
-        if (currentRoom != null) {
-            saveData.setCurrentRoomId(currentRoom.getId());
-        }
-
-        saveData.setInventoryItemIds(getInventoryItemIds(gameState));
-        saveData.setFlags(new HashMap<>(gameState.getFlags()));
-        saveData.setEncounterPhase(gameState.getEncounterPhase());
+        saveData.setSaveFormatVersion(CURRENT_SAVE_FORMAT_VERSION);
+        saveData.setGameDataPath(gameState.getGameDataPath());
         saveData.setCommandHistory(gameState.getCommandHistory());
-        saveData.setRoomItemIds(getRoomItemIds(gameState));
-        saveData.setRoomEnemies(getRoomEnemies(gameState));
-        saveData.setExitLocks(getExitLocks(gameState));
-        saveData.setPlayerInjured(gameState.getPlayer().isInjured());
-        saveData.setPlayerTurnsUntilDeath(gameState.getPlayer().getTurnsUntilDeath());
-        saveData.setPlayerAlive(gameState.getPlayer().isAlive());
 
         return saveData;
     }
 
-    private static List<String> getInventoryItemIds(CurrentGameState gameState) {
-        List<String> itemIds = new ArrayList<>();
-
-        for (Item item : gameState.getPlayer().getInventory()) {
-            itemIds.add(item.getId());
-        }
-
-        return itemIds;
-    }
-
-    private static Map<String, List<String>> getRoomItemIds(CurrentGameState gameState) {
-        Map<String, List<String>> roomItemIds = new HashMap<>();
-
-        for (Room room : gameState.getRooms().values()) {
-            List<String> itemIds = new ArrayList<>();
-
-            for (Item item : room.getItems()) {
-                itemIds.add(item.getId());
-            }
-
-            roomItemIds.put(room.getId(), itemIds);
-        }
-
-        return roomItemIds;
-    }
-
-    private static Map<String, List<SaveData.SavedEnemy>> getRoomEnemies(CurrentGameState gameState) {
-        Map<String, List<SaveData.SavedEnemy>> roomEnemies = new HashMap<>();
-
-        for (Room room : gameState.getRooms().values()) {
-            List<SaveData.SavedEnemy> enemies = new ArrayList<>();
-
-            for (Enemy enemy : room.getEnemies()) {
-                enemies.add(new SaveData.SavedEnemy(
-                        enemy.getId(),
-                        enemy.getName(),
-                        enemy.getDescription(),
-                        enemy.getType(),
-                        enemy.isDefeated()
-                ));
-            }
-
-            roomEnemies.put(room.getId(), enemies);
-        }
-
-        return roomEnemies;
-    }
-
-    private static Map<String, Map<String, Boolean>> getExitLocks(CurrentGameState gameState) {
-        Map<String, Map<String, Boolean>> exitLocks = new HashMap<>();
-
-        for (Room room : gameState.getRooms().values()) {
-            Map<String, Boolean> roomExitLocks = new HashMap<>();
-
-            for (Map.Entry<String, Exit> entry : room.getExits().entrySet()) {
-                roomExitLocks.put(entry.getKey(), entry.getValue().isLocked());
-            }
-
-            exitLocks.put(room.getId(), roomExitLocks);
-        }
-
-        return exitLocks;
-    }
-
-    private static void restore(CurrentGameState gameState, SaveData saveData) {
+    public static void restoreLegacySnapshot(CurrentGameState gameState, SaveData saveData) {
         if (saveData == null) {
             throw new IllegalStateException("Save file is empty or invalid.");
+        }
+
+        if (!saveData.hasLegacySnapshot()) {
+            throw new IllegalStateException("Replay-based saves must be loaded through the game session.");
         }
 
         restoreRooms(gameState, saveData);

@@ -1,5 +1,4 @@
 {
-  "id": "demo_game",
   "gameConfig": {
     "title": "DEMO ADVENTURE",
     "startRoomId": "cabin",

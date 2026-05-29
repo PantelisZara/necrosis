@@ -30,4 +30,7 @@ bin/
 .vscode/
 
 ### Mac OS ###
-.DS_Storesaves/*.json
+.DS_Store
+
+### Runtime saves ###
+saves/*.json

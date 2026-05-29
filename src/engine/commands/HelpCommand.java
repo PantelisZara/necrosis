@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class HelpCommand implements InterfaceCommand, ConfigurableCommand {
+public class HelpCommand implements InterfaceCommand, ConfigurableCommand, NonReplayableCommand {
 
     private static final Gson GSON = new Gson();
 

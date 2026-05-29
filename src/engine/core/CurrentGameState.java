@@ -5,6 +5,7 @@ import engine.model.Item;
 import engine.model.Player;
 import engine.model.Room;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,9 @@ public class CurrentGameState {
     private final Map<String, Boolean> flags;
     private final Map<String, Item> itemTemplates;
     private final CommandHistory commandHistory;
+    private GameSessionController gameSessionController;
+    private String gameDataPath;
+    private boolean replaying;
     private int encounterPhase;
     private List<EncounterPhase> encounterPhases;
 
@@ -30,12 +34,9 @@ public class CurrentGameState {
         this.flags = new HashMap<>();
         this.itemTemplates = itemTemplates != null ? itemTemplates : new HashMap<>();
         this.commandHistory = new CommandHistory();
+        this.replaying = false;
         this.encounterPhase = 0;
         this.encounterPhases = new ArrayList<>();
-    }
-
-    public Map<String, Room> getRooms() {
-        return rooms;
     }
 
     public Player getPlayer() {
@@ -90,6 +91,10 @@ public class CurrentGameState {
     }
 
     public void recordCommand(String input) {
+        if (replaying) {
+            return;
+        }
+
         commandHistory.record(input);
     }
 
@@ -97,11 +102,35 @@ public class CurrentGameState {
         return commandHistory.getCommands();
     }
 
-    public boolean hasCommandHistory() {
-        return !commandHistory.isEmpty();
-    }
-
     public void restoreCommandHistory(List<String> savedCommands) {
         commandHistory.replaceWith(savedCommands);
+    }
+
+    public void setGameSessionController(GameSessionController gameSessionController) {
+        this.gameSessionController = gameSessionController;
+    }
+
+    public void loadSavedGame() throws IOException {
+        if (gameSessionController == null) {
+            throw new IllegalStateException("No game session is available to load saved games.");
+        }
+
+        gameSessionController.loadSavedGame();
+    }
+
+    public String getGameDataPath() {
+        return gameDataPath;
+    }
+
+    public void setGameDataPath(String gameDataPath) {
+        this.gameDataPath = gameDataPath;
+    }
+
+    public void beginReplay() {
+        this.replaying = true;
+    }
+
+    public void endReplay() {
+        this.replaying = false;
     }
 }

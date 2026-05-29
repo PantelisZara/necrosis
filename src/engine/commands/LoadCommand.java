@@ -6,7 +6,7 @@ import engine.save.SaveManager;
 import java.io.IOException;
 import java.util.List;
 
-public class LoadCommand implements InterfaceCommand {
+public class LoadCommand implements InterfaceCommand, NonReplayableCommand {
 
     @Override
     public void execute(CurrentGameState gameState, List<String> args) {
@@ -16,7 +16,7 @@ public class LoadCommand implements InterfaceCommand {
         }
 
         try {
-            SaveManager.load(gameState);
+            gameState.loadSavedGame();
             System.out.println("Game loaded successfully from " + SaveManager.getSavePath() + ".");
         } catch (IOException | IllegalStateException e) {
             System.out.println("Could not load the saved game: " + e.getMessage());

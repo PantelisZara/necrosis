@@ -13,15 +13,16 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 
-public class GameWindow extends JFrame {
+public final class GameWindow extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
     private final JTextArea outputArea;
     private final JTextField inputField;
+    private final JLabel headerTitle;
 
     public GameWindow() {
-        setTitle("NECROSIS");
+        setTitle("Text Adventure");
         setSize(980, 720);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -41,18 +42,14 @@ public class GameWindow extends JFrame {
                 BorderFactory.createEmptyBorder(10, 14, 10, 14)
         ));
 
-        JLabel title = new JLabel("ZAUN BIOMEDICAL TERMINAL");
-        title.setForeground(fg);
-        title.setFont(new Font("Consolas", Font.BOLD, 18));
+        headerTitle = new JLabel("TEXT ADVENTURE ENGINE");
+        headerTitle.setForeground(fg);
+        headerTitle.setFont(new Font("Consolas", Font.BOLD, 18));
 
-        JLabel subtitle = new JLabel("Containment Facility — NV-1");
-        subtitle.setForeground(dim);
-        subtitle.setFont(new Font("Consolas", Font.PLAIN, 13));
 
         JPanel titleWrap = new JPanel(new BorderLayout());
         titleWrap.setBackground(panel);
-        titleWrap.add(title, BorderLayout.NORTH);
-        titleWrap.add(subtitle, BorderLayout.SOUTH);
+        titleWrap.add(headerTitle, BorderLayout.NORTH);
 
         header.add(titleWrap, BorderLayout.WEST);
 
@@ -126,6 +123,15 @@ public class GameWindow extends JFrame {
     public void appendOutput(String text) {
         outputArea.append(text);
         outputArea.setCaretPosition(outputArea.getDocument().getLength());
+    }
+
+    public void setGameTitle(String title) {
+        if (title == null || title.isBlank()) {
+            return;
+        }
+
+        setTitle(title);
+        headerTitle.setText(title);
     }
 
 

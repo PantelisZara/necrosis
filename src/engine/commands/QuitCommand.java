@@ -4,7 +4,7 @@ import engine.core.CurrentGameState;
 
 import java.util.List;
 
-public class QuitCommand implements InterfaceCommand {
+public class QuitCommand implements InterfaceCommand, NonReplayableCommand {
 
     @Override
     public void execute(CurrentGameState gameState, List<String> args) {

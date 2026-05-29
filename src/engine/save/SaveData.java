@@ -1,67 +1,66 @@
 package engine.save;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class SaveData {
 
+    private Integer saveFormatVersion;
+    private String gameDataPath;
     private String currentRoomId;
     private List<String> inventoryItemIds;
     private Map<String, Boolean> flags;
-    private int encounterPhase;
+    private Integer encounterPhase;
     private List<String> commandHistory;
     private Map<String, List<String>> roomItemIds;
     private Map<String, List<SavedEnemy>> roomEnemies;
     private Map<String, Map<String, Boolean>> exitLocks;
-    private boolean playerInjured;
-    private int playerTurnsUntilDeath;
-    private boolean playerAlive;
+    private Boolean playerInjured;
+    private Integer playerTurnsUntilDeath;
+    private Boolean playerAlive;
 
     public SaveData() {
-        this.inventoryItemIds = new ArrayList<>();
-        this.flags = new HashMap<>();
         this.commandHistory = new ArrayList<>();
-        this.roomItemIds = new HashMap<>();
-        this.roomEnemies = new HashMap<>();
-        this.exitLocks = new HashMap<>();
-        this.playerAlive = true;
+    }
+
+    public int getSaveFormatVersion() {
+        return saveFormatVersion != null ? saveFormatVersion : 1;
+    }
+
+    public void setSaveFormatVersion(int saveFormatVersion) {
+        this.saveFormatVersion = saveFormatVersion;
+    }
+
+    public String getGameDataPath() {
+        return gameDataPath;
+    }
+
+    public void setGameDataPath(String gameDataPath) {
+        this.gameDataPath = gameDataPath;
     }
 
     public String getCurrentRoomId() {
         return currentRoomId;
     }
 
-    public void setCurrentRoomId(String currentRoomId) {
-        this.currentRoomId = currentRoomId;
-    }
-
     public List<String> getInventoryItemIds() {
         return inventoryItemIds;
-    }
-
-    public void setInventoryItemIds(List<String> inventoryItemIds) {
-        this.inventoryItemIds = inventoryItemIds;
     }
 
     public Map<String, Boolean> getFlags() {
         return flags;
     }
 
-    public void setFlags(Map<String, Boolean> flags) {
-        this.flags = flags;
-    }
-
     public int getEncounterPhase() {
-        return encounterPhase;
-    }
-
-    public void setEncounterPhase(int encounterPhase) {
-        this.encounterPhase = encounterPhase;
+        return encounterPhase != null ? encounterPhase : 0;
     }
 
     public List<String> getCommandHistory() {
+        if (commandHistory == null) {
+            commandHistory = new ArrayList<>();
+        }
+
         return commandHistory;
     }
 
@@ -73,48 +72,41 @@ public class SaveData {
         return roomItemIds;
     }
 
-    public void setRoomItemIds(Map<String, List<String>> roomItemIds) {
-        this.roomItemIds = roomItemIds;
-    }
-
     public Map<String, List<SavedEnemy>> getRoomEnemies() {
         return roomEnemies;
-    }
-
-    public void setRoomEnemies(Map<String, List<SavedEnemy>> roomEnemies) {
-        this.roomEnemies = roomEnemies;
     }
 
     public Map<String, Map<String, Boolean>> getExitLocks() {
         return exitLocks;
     }
 
-    public void setExitLocks(Map<String, Map<String, Boolean>> exitLocks) {
-        this.exitLocks = exitLocks;
-    }
-
     public boolean isPlayerInjured() {
-        return playerInjured;
-    }
-
-    public void setPlayerInjured(boolean playerInjured) {
-        this.playerInjured = playerInjured;
+        return Boolean.TRUE.equals(playerInjured);
     }
 
     public int getPlayerTurnsUntilDeath() {
-        return playerTurnsUntilDeath;
-    }
-
-    public void setPlayerTurnsUntilDeath(int playerTurnsUntilDeath) {
-        this.playerTurnsUntilDeath = playerTurnsUntilDeath;
+        return playerTurnsUntilDeath != null ? playerTurnsUntilDeath : 0;
     }
 
     public boolean isPlayerAlive() {
-        return playerAlive;
+        return playerAlive == null || playerAlive;
     }
 
-    public void setPlayerAlive(boolean playerAlive) {
-        this.playerAlive = playerAlive;
+    public boolean hasReplayHistory() {
+        return commandHistory != null && !commandHistory.isEmpty();
+    }
+
+    public boolean hasLegacySnapshot() {
+        return currentRoomId != null
+                || inventoryItemIds != null
+                || flags != null
+                || encounterPhase != null
+                || roomItemIds != null
+                || roomEnemies != null
+                || exitLocks != null
+                || playerInjured != null
+                || playerTurnsUntilDeath != null
+                || playerAlive != null;
     }
 
     public static class SavedEnemy {
@@ -125,14 +117,6 @@ public class SaveData {
         private boolean defeated;
 
         public SavedEnemy() {
-        }
-
-        public SavedEnemy(String id, String name, String description, String type, boolean defeated) {
-            this.id = id;
-            this.name = name;
-            this.description = description;
-            this.type = type;
-            this.defeated = defeated;
         }
 
         public String getId() {

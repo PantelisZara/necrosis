@@ -12,12 +12,7 @@ public class CommandDefinition {
     private JsonObject config;
 
     public CommandDefinition() {
-        this("", new ArrayList<>());
-    }
-
-    public CommandDefinition(String className, List<String> aliases) {
-        this.className = className;
-        this.aliases = aliases != null ? aliases : new ArrayList<>();
+        this.aliases = new ArrayList<>();
     }
 
     public String getClassName() {

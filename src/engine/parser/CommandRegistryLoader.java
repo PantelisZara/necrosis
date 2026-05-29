@@ -10,8 +10,7 @@ public class CommandRegistryLoader {
 
     public static void registerCommands(CommandCutter parser, List<CommandDefinition> commandDefinitions) {
         if (commandDefinitions == null || commandDefinitions.isEmpty()) {
-            System.out.println("No commands were defined in gameConfig.");
-            return;
+            throw new IllegalStateException("No commands were defined in gameConfig.");
         }
 
         for (CommandDefinition definition : commandDefinitions) {
@@ -21,13 +20,11 @@ public class CommandRegistryLoader {
 
     private static void registerCommand(CommandCutter parser, CommandDefinition definition) {
         if (definition == null || definition.getClassName() == null || definition.getClassName().isBlank()) {
-            System.out.println("Skipping command with missing className.");
-            return;
+            throw new IllegalStateException("Command definition is missing className.");
         }
 
-        if (definition.getAliases() == null || definition.getAliases().isEmpty()) {
-            System.out.println("Skipping command " + definition.getClassName() + ": no aliases defined.");
-            return;
+        if (definition.getAliases().isEmpty()) {
+            throw new IllegalStateException("Command " + definition.getClassName() + " has no aliases defined.");
         }
 
         try {
@@ -35,8 +32,9 @@ public class CommandRegistryLoader {
             Object instance = commandClass.getDeclaredConstructor().newInstance();
 
             if (!(instance instanceof InterfaceCommand)) {
-                System.out.println("Command class does not implement InterfaceCommand: " + definition.getClassName());
-                return;
+                throw new IllegalStateException(
+                        "Command class does not implement InterfaceCommand: " + definition.getClassName()
+                );
             }
 
             if (instance instanceof ConfigurableCommand configurableCommand) {
@@ -49,9 +47,10 @@ public class CommandRegistryLoader {
             );
 
         } catch (ClassNotFoundException e) {
-            System.out.println("Command class not found: " + definition.getClassName());
+            throw new IllegalStateException("Command class not found: " + definition.getClassName(), e);
         } catch (ReflectiveOperationException e) {
-            System.out.println("Could not create command " + definition.getClassName() + ": " + e.getMessage());
+            throw new IllegalStateException("Could not create command "
+                    + definition.getClassName() + ": " + e.getMessage(), e);
         }
     }
 }

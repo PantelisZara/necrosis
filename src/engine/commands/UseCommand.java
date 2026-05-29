@@ -36,9 +36,10 @@ public class UseCommand implements InterfaceCommand, ConfigurableCommand {
             return;
         }
 
-        String target = String.join(" ", args).toLowerCase();
+        UseRequest request = UseRequest.from(args);
+        String target = request.getActionTarget();
 
-        HealingItem healingItem = config.findHealingItem(target);
+        HealingItem healingItem = config.findHealingItem(request.getUsedItemOrTarget());
         if (healingItem != null) {
             useHealingItem(gameState, healingItem);
             return;
@@ -50,11 +51,21 @@ public class UseCommand implements InterfaceCommand, ConfigurableCommand {
 
         Room currentRoom = gameState.getPlayer().getCurrentRoom();
 
-        Interactable interactable = currentRoom.findInteractableByName(target);
+        Interactable interactable = currentRoom.findInteractableByName(request.getInteractableTarget());
 
         if (interactable == null) {
             System.out.println("You can't use that here.");
             return;
+        }
+
+        Item usedItem = null;
+        if (request.hasUsedItem()) {
+            usedItem = findInventoryItem(gameState, request.getUsedItemOrTarget());
+
+            if (usedItem == null) {
+                System.out.println("You do not have that.");
+                return;
+            }
         }
 
         if (interactable.getForbiddenFlag() != null &&
@@ -68,6 +79,13 @@ public class UseCommand implements InterfaceCommand, ConfigurableCommand {
 
         if (interactable.getRequiredFlag() != null &&
                 !gameState.isFlagTrue(interactable.getRequiredFlag())) {
+            System.out.println(interactable.getFailureMessage());
+            return;
+        }
+
+        if (usedItem != null
+                && interactable.getRequiredItemId() != null
+                && !usedItem.getId().equalsIgnoreCase(interactable.getRequiredItemId())) {
             System.out.println(interactable.getFailureMessage());
             return;
         }
@@ -94,6 +112,35 @@ public class UseCommand implements InterfaceCommand, ConfigurableCommand {
         System.out.println(interactable.getSuccessMessage());
 
 
+    }
+
+    private Item findInventoryItem(CurrentGameState gameState, String itemName) {
+        for (Item item : gameState.getPlayer().getInventory()) {
+            if (matchesItem(itemName, item)) {
+                return item;
+            }
+        }
+
+        return null;
+    }
+
+    private boolean matchesItem(String itemName, Item item) {
+        if (item == null || itemName == null) {
+            return false;
+        }
+
+        String normalizedInput = itemName.toLowerCase().trim();
+        return matchesValue(normalizedInput, item.getId())
+                || matchesValue(normalizedInput, item.getName());
+    }
+
+    private boolean matchesValue(String normalizedInput, String value) {
+        if (value == null) {
+            return false;
+        }
+
+        String normalizedValue = value.toLowerCase().replace("_", " ");
+        return normalizedInput.equals(normalizedValue);
     }
 
     private void useHealingItem(CurrentGameState gameState, HealingItem healingItem) {
@@ -191,6 +238,58 @@ public class UseCommand implements InterfaceCommand, ConfigurableCommand {
             }
 
             return successMessages;
+        }
+    }
+
+    private static class UseRequest {
+        private final String usedItemOrTarget;
+        private final String interactableTarget;
+        private final String actionTarget;
+
+        private UseRequest(String usedItemOrTarget, String interactableTarget, String actionTarget) {
+            this.usedItemOrTarget = usedItemOrTarget;
+            this.interactableTarget = interactableTarget;
+            this.actionTarget = actionTarget;
+        }
+
+        private static UseRequest from(List<String> args) {
+            int prepositionIndex = findPreposition(args);
+
+            if (prepositionIndex > 0 && prepositionIndex < args.size() - 1) {
+                String usedItem = String.join(" ", args.subList(0, prepositionIndex)).toLowerCase();
+                String target = String.join(" ", args.subList(prepositionIndex + 1, args.size())).toLowerCase();
+                return new UseRequest(usedItem, target, usedItem + " " + args.get(prepositionIndex) + " " + target);
+            }
+
+            String target = String.join(" ", args).toLowerCase();
+            return new UseRequest(target, target, target);
+        }
+
+        private static int findPreposition(List<String> args) {
+            for (int i = 0; i < args.size(); i++) {
+                String token = args.get(i);
+                if ("on".equalsIgnoreCase(token) || "with".equalsIgnoreCase(token)) {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        private boolean hasUsedItem() {
+            return !usedItemOrTarget.equals(interactableTarget);
+        }
+
+        private String getUsedItemOrTarget() {
+            return usedItemOrTarget;
+        }
+
+        private String getInteractableTarget() {
+            return interactableTarget;
+        }
+
+        private String getActionTarget() {
+            return actionTarget;
         }
     }
 
